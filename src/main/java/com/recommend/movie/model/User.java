@@ -4,16 +4,14 @@ package com.recommend.movie.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 public class User {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -22,4 +20,9 @@ public class User {
 
     @Column
     private String password;
+
+    public User(String username, String password){
+        this.username = username;
+        this.password = password;
+    }
 }
