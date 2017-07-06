@@ -1,5 +1,6 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
+movie-dataset/
 
 ### STS ###
 .apt_generated

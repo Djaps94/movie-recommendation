@@ -19,10 +19,9 @@ public class MovieDataset {
         BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(new File("/home/predrag/Code/movie-recommendation/movie-dataset/movies.csv")));
-            reader.skip(1);
+            reader.readLine();
             while(reader.readLine() != null){
-                if(reader.readLine() != null)
-                    readMovies.add(reader.readLine().trim());
+                    readMovies.add(reader.readLine());
             }
         } catch(Exception e){
             e.printStackTrace();
