@@ -41,6 +41,8 @@ public class CosineSimilarity {
         userProfile = new SparseVector(((Long)movieCols).intValue()- 1);
         idf = new SparseVector(((Long)movieCols).intValue() -1);
         initialiseMovieMatrix(movieMatrix);
+        normalizeMatrix(movieMatrix);
+        
     }
 
 
@@ -73,6 +75,21 @@ public class CosineSimilarity {
                     case "Western": movieMatrix.add(((Long)i).intValue(), 18, 1); break;
                 }
 
+            }
+        }
+    }
+
+    private void normalizeMatrix(DenseMatrix movieMatrix){
+        for(int i = 0; i <= movieMatrix.numRows(); i++){
+            int counter = 0;
+            for(int j = 0; j < movieMatrix.numColumns(); j++){
+                if(movieMatrix.get(i, j) == 1)
+                    counter++;
+            }
+            for(int k = 0; k < movieMatrix.numColumns(); k++){
+                if(movieMatrix.get(i, k) == 1){
+                    movieMatrix.set(i, k , 1/Math.sqrt(counter));
+                }
             }
         }
     }
