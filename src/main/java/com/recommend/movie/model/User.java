@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -22,6 +24,9 @@ public class User {
 
     @Column
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private Set<MovieRating> movieRatings = new HashSet<>();
 
     public User(String username, String password){
         this.username = username;

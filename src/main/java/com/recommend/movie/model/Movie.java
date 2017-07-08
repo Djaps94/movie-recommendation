@@ -10,7 +10,9 @@ import javax.transaction.TransactionScoped;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -68,15 +70,12 @@ public class Movie implements Serializable{
     )
     private List<Genre> genres = new ArrayList<>();
 
+    @OneToMany(mappedBy = "movie")
+    private Set<MovieRating> movieRatings = new HashSet<>();
+
     public String toString(){
         return title;
     }
 
 
-    public void setForeignKey(){
-        for(Genre genre : genres){
-            Hibernate.initialize(genre.getMovies());
-            genre.getMovies().add(this);
-        }
-    }
 }
