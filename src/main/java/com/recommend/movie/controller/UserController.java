@@ -30,7 +30,10 @@ public class UserController {
     )
     @ResponseBody
     public List<User> checkUsers(){
-                return userService.createUsers();
+
+        List<User> users = userService.createUsers();
+        users.forEach(user -> userService.saveUser(user));
+        return users;
     }
 
 }

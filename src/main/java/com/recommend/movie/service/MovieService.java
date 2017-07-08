@@ -13,5 +13,5 @@ public interface MovieService {
 
     Movie getMoviesByGenres(String genre);
 
-    List<String> getMovies();
+    List<Movie> getMovies();
 }

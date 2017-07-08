@@ -21,7 +21,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void save(Movie movie) {
-
+        movieRepository.save(movie);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<String> getMovies() {
-        return movieDataset.createMovies();
+    public List<Movie> getMovies() {
+        return movieDataset.load();
     }
 }
