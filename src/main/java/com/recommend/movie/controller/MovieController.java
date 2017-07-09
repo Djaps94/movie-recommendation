@@ -2,8 +2,10 @@ package com.recommend.movie.controller;
 
 
 import com.recommend.movie.model.Movie;
+import com.recommend.movie.recommender.CosineSimilarity;
 import com.recommend.movie.service.MovieService;
 import com.recommend.movie.util.MovieDataset;
+import no.uib.cipr.matrix.sparse.SparseVector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -22,14 +24,16 @@ public class MovieController {
 
     private MovieService movieService;
     private MovieDataset movieDataset;
+    private CosineSimilarity cosineSimilarity;
 
     private static final Logger log = Logger.getLogger("dsads");
 
     @Autowired
-    public MovieController(MovieService movieService, MovieDataset movieDataset) {
+    public MovieController(MovieService movieService, MovieDataset movieDataset, CosineSimilarity cosineSimilarity) {
 
         this.movieService = movieService;
         this.movieDataset = movieDataset;
+        this.cosineSimilarity = cosineSimilarity;
     }
 
     @RequestMapping(
@@ -47,14 +51,13 @@ public class MovieController {
         return movies;
     }
 
-
     @RequestMapping(
             method = RequestMethod.GET,
             value = "/offset/{start}",
             produces = "application/json"
     )
     @ResponseBody
-    public List<Movie> getOffsetMovies(@PathVariable("start") int pageNumber){
+    public List<Movie> getOffsetMovies(@PathVariable("start") int pageNumber) {
         return movieService.getMoviesOffset(pageNumber);
     }
 }

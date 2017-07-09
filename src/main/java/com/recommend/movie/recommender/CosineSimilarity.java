@@ -42,37 +42,37 @@ public class CosineSimilarity {
         idf = new SparseVector(((Long)movieCols).intValue() -1);
         initialiseMovieMatrix(movieMatrix);
         normalizeMatrix(movieMatrix);
-        
+        calculateIDF(movieMatrix, idf);
     }
 
 
     private void initialiseMovieMatrix(DenseMatrix movieMatrix){
 
-        for(long i = 1; i <= movieMatrix.numRows(); i++){
-            Optional<Movie> movie = movieRepository.findById(i);
+        for(int i = 0; i < movieMatrix.numRows(); i++){
+            Optional<Movie> movie = movieRepository.findById(((Integer)i).longValue()+1);
             if(!movie.isPresent())
                 continue;
-            movieMatrix.add(((Long)i).intValue(), 0, movie.get().getId());
+            movieMatrix.set(i, 0, movie.get().getId());
             for(Genre genre : movie.get().getGenres()){
                 switch(genre.getGenre()){
-                    case "Action" : movieMatrix.add(((Long)i).intValue(), 1, 1); break;
-                    case "Adventure": movieMatrix.add(((Long)i).intValue(), 2, 1); break;
-                    case "Animation": movieMatrix.add(((Long)i).intValue(), 3, 1); break;
-                    case "Childrens": movieMatrix.add(((Long)i).intValue(), 4, 1); break;
-                    case "Comedy": movieMatrix.add(((Long)i).intValue(), 5, 1); break;
-                    case "Crime": movieMatrix.add(((Long)i).intValue(), 6, 1); break;
-                    case "Documentary": movieMatrix.add(((Long)i).intValue(), 7, 1); break;
-                    case "Drama": movieMatrix.add(((Long)i).intValue(), 8, 1); break;
-                    case "Fantasy": movieMatrix.add(((Long)i).intValue(), 9, 1); break;
-                    case "Film-Noir": movieMatrix.add(((Long)i).intValue(), 10, 1); break;
-                    case "Horror": movieMatrix.add(((Long)i).intValue(), 11, 1); break;
-                    case "Musical": movieMatrix.add(((Long)i).intValue(), 12, 1); break;
-                    case "Mystery": movieMatrix.add(((Long)i).intValue(), 13, 1); break;
-                    case "Romance": movieMatrix.add(((Long)i).intValue(), 14, 1); break;
-                    case "Sci-Fi": movieMatrix.add(((Long)i).intValue(), 15, 1); break;
-                    case "Thriller": movieMatrix.add(((Long)i).intValue(), 16, 1); break;
-                    case "War": movieMatrix.add(((Long)i).intValue(), 17, 1); break;
-                    case "Western": movieMatrix.add(((Long)i).intValue(), 18, 1); break;
+                    case "Action" : movieMatrix.set(i, 1, 1); break;
+                    case "Adventure": movieMatrix.set(i, 2, 1); break;
+                    case "Animation": movieMatrix.set(i, 3, 1); break;
+                    case "Childrens": movieMatrix.set(i, 4, 1); break;
+                    case "Comedy": movieMatrix.set(i, 5, 1); break;
+                    case "Crime": movieMatrix.set(i, 6, 1); break;
+                    case "Documentary": movieMatrix.set(i, 7, 1); break;
+                    case "Drama": movieMatrix.set(i, 8, 1); break;
+                    case "Fantasy": movieMatrix.set(i, 9, 1); break;
+                    case "Film-Noir": movieMatrix.set(i, 10, 1); break;
+                    case "Horror": movieMatrix.set(i, 11, 1); break;
+                    case "Musical": movieMatrix.set(i, 12, 1); break;
+                    case "Mystery": movieMatrix.set(i, 13, 1); break;
+                    case "Romance": movieMatrix.set(i, 14, 1); break;
+                    case "Sci-Fi": movieMatrix.set(i, 15, 1); break;
+                    case "Thriller": movieMatrix.set(i, 16, 1); break;
+                    case "War": movieMatrix.set(i, 17, 1); break;
+                    case "Western": movieMatrix.set(i, 18, 1); break;
                 }
 
             }
@@ -80,18 +80,39 @@ public class CosineSimilarity {
     }
 
     private void normalizeMatrix(DenseMatrix movieMatrix){
-        for(int i = 0; i <= movieMatrix.numRows(); i++){
+        for(int i = 0; i < movieMatrix.numRows(); i++){
             int counter = 0;
-            for(int j = 0; j < movieMatrix.numColumns(); j++){
+            for(int j = 1; j < movieMatrix.numColumns(); j++){
                 if(movieMatrix.get(i, j) == 1)
                     counter++;
             }
-            for(int k = 0; k < movieMatrix.numColumns(); k++){
+            for(int k = 1; k < movieMatrix.numColumns(); k++){
                 if(movieMatrix.get(i, k) == 1){
                     movieMatrix.set(i, k , 1/Math.sqrt(counter));
                 }
             }
         }
+    }
+
+    private void calculateIDF(DenseMatrix movieMatrix, SparseVector idf){
+        int numberOfRows = movieMatrix.numRows();
+        for(int j = 1; j < movieMatrix.numColumns(); j++){
+            int ones = 0;
+            for(int i = 1; i < movieMatrix.numRows(); i++){
+                if(movieMatrix.get(i, j) > 0)
+                    ones++;
+            }
+            if(ones == 0) {
+                idf.set(j, 0);
+                continue;
+            }
+            double result = Math.log10(numberOfRows/ones);
+            idf.set(j-1, result);
+        }
+    }
+
+    public SparseVector test(){
+        return idf;
     }
 
 }
