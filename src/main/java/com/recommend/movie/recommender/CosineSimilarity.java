@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -43,6 +45,7 @@ public class CosineSimilarity {
         initialiseMovieMatrix(movieMatrix);
         normalizeMatrix(movieMatrix);
         calculateIDF(movieMatrix, idf);
+        userProfile = calculateUserProfile(movieMatrix, userMatrix);
     }
 
 
@@ -109,6 +112,19 @@ public class CosineSimilarity {
             double result = Math.log10(numberOfRows/ones);
             idf.set(j-1, result);
         }
+    }
+
+    private SparseVector calculateUserProfile(DenseMatrix movieMatrix, DenseMatrix userMatrix){
+        SparseVector temp = new SparseVector(movieMatrix.numColumns());
+
+        for(int j = 1; j < movieMatrix.numColumns(); j++){
+            List<Double> pom = new ArrayList<>();
+            for(int k = 0; k < userMatrix.numRows(); k++){
+                pom.add(movieMatrix.get(k, j) * userMatrix.get(k,0));
+            }
+            temp.set(j-1, pom.stream().mapToDouble(Double::doubleValue).sum());
+        }
+        return temp;
     }
 
     public SparseVector test(){
