@@ -1,7 +1,6 @@
 package com.recommend.movie.util;
 
 
-import ch.qos.logback.core.net.ObjectWriter;
 import com.recommend.movie.model.Genre;
 import com.recommend.movie.model.Movie;
 import com.recommend.movie.repository.GenreRepository;

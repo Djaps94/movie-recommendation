@@ -20,4 +20,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     Optional<Movie> findById(Long id);
 
     List<Movie> findAllByTitleNotNull(Pageable pageable);
+
+    long count();
 }
