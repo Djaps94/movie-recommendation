@@ -1,6 +1,7 @@
 package com.recommend.movie.service.implementation;
 
 import com.recommend.movie.model.Movie;
+import com.recommend.movie.recommender.CosineSimilarity;
 import com.recommend.movie.repository.MovieRepository;
 import com.recommend.movie.service.MovieService;
 import com.recommend.movie.util.MovieDataset;
@@ -16,10 +17,12 @@ public class MovieServiceImpl implements MovieService {
 
     private MovieRepository movieRepository;
     private MovieDataset movieDataset;
+    private CosineSimilarity cosineSimilarity;
 
-    public MovieServiceImpl(MovieRepository movieRepository, MovieDataset movieDataset){
+    public MovieServiceImpl(MovieRepository movieRepository, MovieDataset movieDataset, CosineSimilarity cosineSimilarity){
         this.movieRepository = movieRepository;
         this.movieDataset = movieDataset;
+        this.cosineSimilarity = cosineSimilarity;
     }
 
     @Override
@@ -40,6 +43,13 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<Movie> getMovies() {
         return movieDataset.load();
+    }
+
+    @Override
+    public List<Movie> getSimliarMovies(long id) {
+        cosineSimilarity.addToSeen(id);
+        cosineSimilarity.calculateUserSeen();
+        return cosineSimilarity.calculatePredictionSeen();
     }
 
     @Override

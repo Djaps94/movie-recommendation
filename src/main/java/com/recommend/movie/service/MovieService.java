@@ -16,4 +16,6 @@ public interface MovieService {
     List<Movie> getMoviesOffset(int startCount);
 
     List<Movie> getMovies();
+
+    public List<Movie> getSimliarMovies(long id);
 }

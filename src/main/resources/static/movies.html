@@ -15,17 +15,17 @@
             </form>
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
 
         </div>
     </nav>
 
     <!-- PRIKAZ FILMOVA -->
-    <div ng-if="moviesShow">
-        <div class="row" ng-repeat="movie in movies">
+    <div ng-if="moviesShow" style="position: relative;">
+        <div class="row" style="margin-bottom: 1%;" ng-repeat="movie in movies">
             <div ng-if="!($index % 4)">
-                <div class="col-md-3" ng-click="showMovie(movies[$index])">
+                <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index])">
                     <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
                             <img src="http://image.tmdb.org/t/p/original/{{movies[$index].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                             <div class="caption">
@@ -33,7 +33,7 @@
                             </div>
                     </div>
                 </div>
-                <div class="col-md-3" ng-click="showMovie(movies[$index+1])">
+                <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index+1])">
                     <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
                         <img src="http://image.tmdb.org/t/p/original/{{movies[$index+1].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                         <div class="caption">
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3" ng-click="showMovie(movies[$index+2])">
+                <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index+2])">
                     <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
                         <img src="http://image.tmdb.org/t/p/original/{{movies[$index+2].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                         <div class="caption">
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3" ng-click="showMovie(movies[$index+3])">
+                <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index+3])">
                     <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
                         <img src="http://image.tmdb.org/t/p/original/{{movies[$index+3].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                         <div class="caption">
@@ -60,50 +60,69 @@
             </div>
         </div>
 
-        <nav style="text-align: center">
-            <ul class="pagination">
-                <li><a aria-label="Previous" ng-click="nextPage(pageNumber-1)" > <span aria-hidden="true">&laquo;</span></a></li>
-                <li><a ng-click="nextPage(pageNumber+1)">{{pageNumber + 1}}</a></li>
-                <li><a ng-click="nextPage(pageNumber+2)">{{pageNumber + 2}}</a></li>
-                <li><a ng-click="nextPage(pageNumber+3)">{{pageNumber + 3}}</a></li>
-                <li><a ng-click="nextPage(pageNumber+1)" aria-label="Next" > <span aria-hidden="true">&raquo;</span></a></li>
-            </ul>
-        </nav>
+        <div style="position: absolute; bottom: 0;left: 45%;">
+            <div data-tooltip="Previous" class="pagination__dot" ng-click="nextPage(pageNumber-1)"> </div>
+            <div data-tooltip="Page {{pageNumber + 1}}" class="pagination__dot" ng-click="nextPage(pageNumber+1)"> </div>
+            <div data-tooltip="Page {{pageNumber + 2}}" class="pagination__dot" ng-click="nextPage(pageNumber+2)"> </div>
+            <div data-tooltip="Page {{pageNumber + 3}}" class="pagination__dot" ng-click="nextPage(pageNumber+3)"> </div>
+            <div data-tooltip="Next" class="pagination__dot" ng-click="nextPage(pageNumber+1)"> </div>
+        </div>
     </div>
 
 
     <!-- PRIKAZ FILMA -->
     <div ng-if="!moviesShow">
 
-        <div class="container">
-            <h1 style="text-align: center; color: aquamarine">{{movieToShow.title}}</h1>
+        <div class="container" style="position:relative;">
             <div class="row" >
+                <h1 style="text-align: center; color: aquamarine; margin-bottom: 3%;">{{movieToShow.title}}</h1>
                 <div class="col-md-4">
                     <div class="imgAbt">
+                        <div style="text-align: left;margin-bottom: 7%;">
+                            <a class="btn btn-sm btn-info hvr-icon-back" ng-click="showMovies()">Back to main</a>
+                        </div>
                         <img width="270" height="320" src="http://image.tmdb.org/t/p/original/{{movieToShow.posterPath}}" />
                     </div>
                 </div>
                 <div class="col-md-6" style="color: white">
                     <p>{{movieToShow.overview}}</p>
                     <br/>
-                    <p>
+                    <span class="hvr-icon-spin" ng-click="facts()" style="margin-bottom: 3%;font-size: 24px;">Facts</span>
+                    <p class="slide-toggle-js" ng-if="factsShow">
                         <b style="font-size: 16px; color: #31acae"> Status: </b>{{movieToShow.status}}
                         <br/>
                         <b style="font-size: 16px; color: #31acae"> Language: </b>{{movieToShow.language}}
                         <br/>
                         <b style="font-size: 16px; color: #31acae"> Runtime: </b>{{movieToShow.runtime}} min
+                        <br/>
+                        <b style="font-size: 16px; color: #31acae"> Revenue: </b> {{ movieToShow.revenue }} $
+                        <br/>
+                        <b style="font-size: 16px; color: #31acae"> Release date: </b> {{ movieToShow.releaseDate }}
                     </p>
 
                     <br/>
                     <a class="btn btn-warning">Watch<span class="glyphicon glyphicon-play"></span></a>
-                    <a class="btn btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> </a>
+                    <a class="hvr-icon-bounce"></a>
                     <br/>
                     <br/>
                 </div>
             </div>
-            <div style="text-align: center">
-                <a class="btn btn-sm btn-info" ng-click="showMovies()">&laquo;</a>
+
+            <div style="margin-top: 5%;">
+                <h3 style="color: dodgerblue">Similar movies to watch</h3>
+                <hr>
+                <div class="row" ng-repeat="sim in similar">
+                    <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index])">
+                        <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
+                            <img src="http://image.tmdb.org/t/p/original/{{similar[$index].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
+                            <div class="caption">
+                                <p style="text-align: center; color: rgb(49,172,174); font-size: 15px"><b>{{similar[$index].title}}</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 

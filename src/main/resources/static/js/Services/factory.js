@@ -1,6 +1,3 @@
-/**
- * Created by Sasa on 08-Jul-17.
- */
 
 var app = angular.module('factory', []).factory('factory',function ($http) {
 
@@ -10,6 +7,13 @@ var app = angular.module('factory', []).factory('factory',function ($http) {
         return $http({
             method: 'GET',
             url: "/movies/offset/"+startCount
+        });
+    }
+
+    factory.getSimilarMovies = function (movieId){
+        return $http({
+            method: 'GET',
+            url: "/movies/similar/"+movieId
         });
     }
 
