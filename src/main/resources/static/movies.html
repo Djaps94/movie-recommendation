@@ -15,7 +15,7 @@
             </form>
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
 
         </div>
@@ -76,8 +76,8 @@
     <div ng-if="!moviesShow">
 
         <div class="container">
-            <h1 style="text-align: center; color: aquamarine">{{movieToShow.title}}</h1>
             <div class="row" >
+                <h1 style="text-align: center; color: aquamarine; margin-bottom: 3%;">{{movieToShow.title}}</h1>
                 <div class="col-md-4">
                     <div class="imgAbt">
                         <img width="270" height="320" src="http://image.tmdb.org/t/p/original/{{movieToShow.posterPath}}" />
@@ -92,6 +92,7 @@
                         <b style="font-size: 16px; color: #31acae"> Language: </b>{{movieToShow.language}}
                         <br/>
                         <b style="font-size: 16px; color: #31acae"> Runtime: </b>{{movieToShow.runtime}} min
+                        <b style="font-size: 16px; color: #31acae"> Revenue: </b> {{ movieToShow.revenue }}
                     </p>
 
                     <br/>

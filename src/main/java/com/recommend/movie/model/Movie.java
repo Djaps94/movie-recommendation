@@ -1,5 +1,6 @@
 package com.recommend.movie.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -71,6 +72,7 @@ public class Movie implements Serializable{
     private List<Genre> genres = new ArrayList<>();
 
     @OneToMany(mappedBy = "movie")
+    @JsonBackReference
     private Set<MovieRating> movieRatings = new HashSet<>();
 
     public String toString(){
