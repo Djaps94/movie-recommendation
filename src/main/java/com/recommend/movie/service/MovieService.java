@@ -13,5 +13,7 @@ public interface MovieService {
 
     Movie getMoviesByGenres(String genre);
 
+    List<Movie> getMoviesOffset(int startCount);
+
     List<Movie> getMovies();
 }
