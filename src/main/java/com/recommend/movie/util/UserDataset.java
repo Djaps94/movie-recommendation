@@ -20,7 +20,7 @@ public class UserDataset {
         Set<String> returnList = new HashSet<>();
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader(new File("/home/predrag/Code/users")));
+            reader = new BufferedReader(new FileReader(new File("D:\\04 GODINA\\users.txt232")));
             while (reader.readLine() != null){
                 if(reader.readLine() != null)
                     usernames.add(reader.readLine().trim());
@@ -41,7 +41,7 @@ public class UserDataset {
         List<String> returnList = new ArrayList<>();
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader(new File("/home/predrag/Code/passwords")));
+            reader = new BufferedReader(new FileReader(new File("D:\\04 GODINA\\passwords.txt332")));
             while(reader.readLine() != null){
                 if(reader.readLine() != null)
                     passwords.add(reader.readLine().trim());

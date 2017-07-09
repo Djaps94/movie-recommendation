@@ -138,7 +138,7 @@ public class MovieDataset {
 
     public List<Movie> load(){
         try{
-            FileInputStream fin = new FileInputStream("/home/predrag/Code/movie-recommendation/movie-dataset/movies.bin");
+            FileInputStream fin = new FileInputStream("D:\\04 GODINA\\movies.bin232");
             ObjectInputStream in = new ObjectInputStream(fin);
             List<Movie> movie = (ArrayList<Movie>) in.readObject();
             in.close();
