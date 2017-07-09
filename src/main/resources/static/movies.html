@@ -84,7 +84,8 @@
                 <div class="col-md-6" style="color: white">
                     <p>{{movieToShow.overview}}</p>
                     <br/>
-                    <p>
+                    <span class="hvr-icon-spin" ng-click="facts()">Facts</span>
+                    <p class="slide-toggle-js" ng-if="factsShow">
                         <b style="font-size: 16px; color: #31acae"> Status: </b>{{movieToShow.status}}
                         <br/>
                         <b style="font-size: 16px; color: #31acae"> Language: </b>{{movieToShow.language}}
