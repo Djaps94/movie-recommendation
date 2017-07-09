@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class CosineSimilarity {
@@ -24,6 +24,7 @@ public class CosineSimilarity {
     private DenseMatrix userMatrix;
     private SparseVector idf;
     private SparseVector userProfile;
+    private DenseMatrix tfIdf;
 
     private MovieRepository movieRepository;
     private GenreRepository genreRepository;
@@ -40,12 +41,13 @@ public class CosineSimilarity {
         long movieCols = genreRepository.count() + 1;
         movieMatrix = new DenseMatrix(((Long)movieRows).intValue(), ((Long)movieCols).intValue());
         userMatrix = new DenseMatrix(((Long)movieRows).intValue(), 1);
-        userProfile = new SparseVector(((Long)movieCols).intValue()- 1);
+        userMatrix.set(12,0, 1);
         idf = new SparseVector(((Long)movieCols).intValue() -1);
         initialiseMovieMatrix(movieMatrix);
         normalizeMatrix(movieMatrix);
         calculateIDF(movieMatrix, idf);
         userProfile = calculateUserProfile(movieMatrix, userMatrix);
+        tfIdf = calculateTFIDF(idf, movieMatrix);
     }
 
 
@@ -115,7 +117,7 @@ public class CosineSimilarity {
     }
 
     private SparseVector calculateUserProfile(DenseMatrix movieMatrix, DenseMatrix userMatrix){
-        SparseVector temp = new SparseVector(movieMatrix.numColumns());
+        SparseVector temp = new SparseVector(movieMatrix.numColumns() -1);
 
         for(int j = 1; j < movieMatrix.numColumns(); j++){
             List<Double> pom = new ArrayList<>();
@@ -127,8 +129,34 @@ public class CosineSimilarity {
         return temp;
     }
 
+    private DenseMatrix calculateTFIDF(SparseVector idf, DenseMatrix movieMatrix){
+        DenseMatrix temp = new DenseMatrix(movieMatrix.numRows(), idf.size());
+        for(int j = 0; j < movieMatrix.numRows(); j++) {
+            for (int i = 0; i < idf.size(); i++) {
+                temp.set(j, i, idf.get(i) * movieMatrix.get(j, i+1));
+            }
+        }
+        return temp;
+    }
+
+    public Map<Long, Double> calculatePrediction(){
+        Map<Long, Double> predictions = new TreeMap<>();
+        for(int i = 0; i < tfIdf.numRows(); i++) {
+            double result = 0;
+            for (int j = 0; j < userProfile.size(); j++) {
+                result += userProfile.get(j) * tfIdf.get(i,j);
+            }
+            predictions.put(((Integer)i).longValue()+1, result);
+        }
+        Map returnMap = predictions.entrySet().stream()
+                                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, newValue) -> old, LinkedHashMap::new));
+
+        return returnMap;
+    }
+
     public SparseVector test(){
-        return idf;
+        return userProfile;
     }
 
 }

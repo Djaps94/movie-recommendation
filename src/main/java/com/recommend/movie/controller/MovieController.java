@@ -5,18 +5,16 @@ import com.recommend.movie.model.Movie;
 import com.recommend.movie.recommender.CosineSimilarity;
 import com.recommend.movie.service.MovieService;
 import com.recommend.movie.util.MovieDataset;
-import no.uib.cipr.matrix.sparse.SparseVector;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.logging.Logger;
+
 
 @Controller
 @RequestMapping(value = "movies")
