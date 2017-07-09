@@ -6,6 +6,7 @@ var app = angular.module('movies',[]);
 
 app.controller('movies',['$scope', 'factory', function ($scope, $factory) {
 
+    $scope.moviesShow = true;
     $scope.pageNumber = 0;
 
     $scope.movies = [];
@@ -18,6 +19,8 @@ app.controller('movies',['$scope', 'factory', function ($scope, $factory) {
         );
     }
 
+    $scope.loadPage();
+
     $scope.nextPage = function (newPageNumber) {
         if(newPageNumber > 455 || newPageNumber < 0){
             return;
@@ -26,6 +29,17 @@ app.controller('movies',['$scope', 'factory', function ($scope, $factory) {
         $scope.loadPage();
     }
 
-    $scope.loadPage();
+
+    $scope.showMovie = function (movieToShow) {
+        $scope.moviesShow = false;
+        $scope.movieToShow = movieToShow;
+    }
+
+    $scope.showMovies = function () {
+        $scope.moviesShow = true;
+    }
+
+
+
 
 }]);

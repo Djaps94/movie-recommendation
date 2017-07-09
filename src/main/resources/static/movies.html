@@ -21,52 +21,90 @@
         </div>
     </nav>
 
-    <div class="row" ng-repeat="movie in movies">
-        <div ng-if="!($index % 4)">
-            <div class="col-md-3">
-                <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
-                        <img src="http://image.tmdb.org/t/p/original/{{movies[$index].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
+    <!-- PRIKAZ FILMOVA -->
+    <div ng-if="moviesShow">
+        <div class="row" ng-repeat="movie in movies">
+            <div ng-if="!($index % 4)">
+                <div class="col-md-3" ng-click="showMovie(movies[$index])">
+                    <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
+                            <img src="http://image.tmdb.org/t/p/original/{{movies[$index].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
+                            <div class="caption">
+                                <p style="text-align: center; color: rgb(49,172,174); font-size: 15px"><b>{{movies[$index].title}}</b></p>
+                            </div>
+                    </div>
+                </div>
+                <div class="col-md-3" ng-click="showMovie(movies[$index+1])">
+                    <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
+                        <img src="http://image.tmdb.org/t/p/original/{{movies[$index+1].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                         <div class="caption">
-                            <p style="text-align: center; color: rgba(45,142,144,0.59); font-size: 15px"><b>{{movies[$index].title}}</b></p>
+                            <p style="text-align: center; color: rgb(49,172,174); font-size: 15px"><b>{{movies[$index+1].title}}</b></p>
                         </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
-                    <img src="http://image.tmdb.org/t/p/original/{{movies[$index+1].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
-                    <div class="caption">
-                        <p style="text-align: center; color: rgba(45,142,144,0.59); font-size: 15px"><b>{{movies[$index+1].title}}</b></p>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
-                    <img src="http://image.tmdb.org/t/p/original/{{movies[$index+2].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
-                    <div class="caption">
-                        <p style="text-align: center; color: rgba(45,142,144,0.59); font-size: 15px"><b>{{movies[$index+2].title}}</b></p>
+                <div class="col-md-3" ng-click="showMovie(movies[$index+2])">
+                    <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
+                        <img src="http://image.tmdb.org/t/p/original/{{movies[$index+2].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
+                        <div class="caption">
+                            <p style="text-align: center; color: rgb(49,172,174); font-size: 15px"><b>{{movies[$index+2].title}}</b></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
-                    <img src="http://image.tmdb.org/t/p/original/{{movies[$index+3].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
-                    <div class="caption">
-                        <p style="text-align: center; color: rgba(45,142,144,0.59); font-size: 15px"><b>{{movies[$index+3].title}}</b></p>
+                <div class="col-md-3" ng-click="showMovie(movies[$index+3])">
+                    <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
+                        <img src="http://image.tmdb.org/t/p/original/{{movies[$index+3].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
+                        <div class="caption">
+                            <p style="text-align: center; color: rgb(49,172,174); font-size: 15px"><b>{{movies[$index+3].title}}</b></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <nav style="text-align: center">
+            <ul class="pagination">
+                <li><a aria-label="Previous" ng-click="nextPage(pageNumber-1)" > <span aria-hidden="true">&laquo;</span></a></li>
+                <li><a ng-click="nextPage(pageNumber+1)">{{pageNumber + 1}}</a></li>
+                <li><a ng-click="nextPage(pageNumber+2)">{{pageNumber + 2}}</a></li>
+                <li><a ng-click="nextPage(pageNumber+3)">{{pageNumber + 3}}</a></li>
+                <li><a ng-click="nextPage(pageNumber+1)" aria-label="Next" > <span aria-hidden="true">&raquo;</span></a></li>
+            </ul>
+        </nav>
     </div>
 
-    <nav style="text-align: center">
-        <ul class="pagination">
-            <li><a aria-label="Previous" ng-click="nextPage(pageNumber-1)" > <span aria-hidden="true">&laquo;</span></a></li>
-            <li><a ng-click="nextPage(pageNumber+1)">{{pageNumber + 1}}</a></li>
-            <li><a ng-click="nextPage(pageNumber+2)">{{pageNumber + 2}}</a></li>
-            <li><a ng-click="nextPage(pageNumber+3)">{{pageNumber + 3}}</a></li>
-            <li><a ng-click="nextPage(pageNumber+1)" aria-label="Next" > <span aria-hidden="true">&raquo;</span></a></li>
-        </ul>
-    </nav>
+
+    <!-- PRIKAZ FILMA -->
+    <div ng-if="!moviesShow">
+
+        <div class="container">
+            <h1 style="text-align: center; color: aquamarine">{{movieToShow.title}}</h1>
+            <div class="row" >
+                <div class="col-md-4">
+                    <div class="imgAbt">
+                        <img width="270" height="320" src="http://image.tmdb.org/t/p/original/{{movieToShow.posterPath}}" />
+                    </div>
+                </div>
+                <div class="col-md-6" style="color: white">
+                    <p>{{movieToShow.overview}}</p>
+                    <br/>
+                    <p>
+                        <b style="font-size: 16px; color: #31acae"> Status: </b>{{movieToShow.status}}
+                        <br/>
+                        <b style="font-size: 16px; color: #31acae"> Language: </b>{{movieToShow.language}}
+                        <br/>
+                        <b style="font-size: 16px; color: #31acae"> Runtime: </b>{{movieToShow.runtime}} min
+                    </p>
+
+                    <br/>
+                    <a class="btn btn-warning">Watch<span class="glyphicon glyphicon-play"></span></a>
+                    <a class="btn btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> </a>
+                </div>
+            </div>
+            <div style="text-align: center">
+                <a class="btn btn-sm btn-info" ng-click="showMovies()">&laquo;</a>
+            </div>
+        </div>
+    </div>
+
 
     <br/>
     <br/>
