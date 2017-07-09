@@ -75,12 +75,10 @@
 
         <div class="container" style="position:relative;">
             <div class="row" >
+                <a class="btn btn-sm btn-info hvr-icon-back" ng-click="showMovies()">Back to main</a>
                 <h1 style="text-align: center; color: aquamarine; margin-bottom: 3%;">{{movieToShow.title}}</h1>
                 <div class="col-md-4">
                     <div class="imgAbt">
-                        <div style="text-align: left;margin-bottom: 7%;">
-                            <a class="btn btn-sm btn-info hvr-icon-back" ng-click="showMovies()">Back to main</a>
-                        </div>
                         <img width="270" height="320" src="http://image.tmdb.org/t/p/original/{{movieToShow.posterPath}}" />
                     </div>
                 </div>
@@ -89,15 +87,17 @@
                     <br/>
                     <span class="hvr-icon-spin" ng-click="facts()" style="margin-bottom: 3%;font-size: 24px;">Facts</span>
                     <p class="slide-toggle-js" ng-if="factsShow">
-                        <b style="font-size: 16px; color: #31acae"> Status: </b>{{movieToShow.status}}
+                        <b style="font-size: 16px; color: #31acae"> Status: </b><em> {{movieToShow.status}}</em>
                         <br/>
-                        <b style="font-size: 16px; color: #31acae"> Language: </b>{{movieToShow.language}}
+                        <b style="font-size: 16px; color: #31acae"> Language: </b><em> {{movieToShow.language}}</em>
                         <br/>
-                        <b style="font-size: 16px; color: #31acae"> Runtime: </b>{{movieToShow.runtime}} min
+                        <b style="font-size: 16px; color: #31acae"> Runtime: </b><em> {{movieToShow.runtime}} min </em>
                         <br/>
-                        <b style="font-size: 16px; color: #31acae"> Revenue: </b> {{ movieToShow.revenue }} $
+                        <b style="font-size: 16px; color: #31acae"> Revenue: </b> <em> {{ movieToShow.revenue }} $ </em>
                         <br/>
-                        <b style="font-size: 16px; color: #31acae"> Release date: </b> {{ movieToShow.releaseDate }}
+                        <b style="font-size: 16px; color: #31acae"> Release date: </b> <em>{{ movieToShow.releaseDate }} </em>
+                        <br/>
+                        <b style="font-size: 16px; color: #31acae"> Genres: </b> <em ng-repeat="genre in movieToShow.genres">{{ genre.genre }} &nbsp; </em>
                     </p>
 
                     <br/>
@@ -112,11 +112,37 @@
                 <h3 style="color: dodgerblue">Similar movies to watch</h3>
                 <hr>
                 <div class="row" ng-repeat="sim in similar">
-                    <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index])">
-                        <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
-                            <img src="http://image.tmdb.org/t/p/original/{{similar[$index].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
-                            <div class="caption">
-                                <p style="text-align: center; color: rgb(49,172,174); font-size: 15px"><b>{{similar[$index].title}}</b></p>
+                    <div ng-if="!($index%4)">
+                        <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index])">
+                            <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
+                                <img src="http://image.tmdb.org/t/p/original/{{similar[$index].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
+                                <div class="caption">
+                                    <p style="text-align: center; color: rgb(49,172,174); font-size: 15px"><b>{{similar[$index].title}}</b></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index+1])">
+                            <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
+                                <img src="http://image.tmdb.org/t/p/original/{{similar[$index+1].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
+                                <div class="caption">
+                                    <p style="text-align: center; color: rgb(49,172,174); font-size: 15px"><b>{{similar[$index+1].title}}</b></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index+2])">
+                            <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
+                                <img src="http://image.tmdb.org/t/p/original/{{similar[$index+2].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
+                                <div class="caption">
+                                    <p style="text-align: center; color: rgb(49,172,174); font-size: 15px"><b>{{similar[$index+2].title}}</b></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index+3])">
+                            <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
+                                <img src="http://image.tmdb.org/t/p/original/{{similar[$index+3].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
+                                <div class="caption">
+                                    <p style="text-align: center; color: rgb(49,172,174); font-size: 15px"><b>{{similar[$index+3].title}}</b></p>
+                                </div>
                             </div>
                         </div>
                     </div>

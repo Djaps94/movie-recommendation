@@ -34,7 +34,7 @@ public class RatingDataset {
 
     public List<MovieRating> createRatings(){
         List<MovieRating> ratings = new ArrayList<>();
-        File file = new File("/home/predrag/Code/movie-recommendation/movie-dataset/ratings.csv");
+        File file = new File("D:\\04 GODINA\\ratings.csv5252");
         try{
             CSVParser parser = CSVParser.parse(file, Charset.defaultCharset(), CSVFormat.DEFAULT);
             for(CSVRecord record : parser.getRecords()){
