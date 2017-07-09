@@ -22,16 +22,15 @@ public class MovieController {
 
     private MovieService movieService;
     private MovieDataset movieDataset;
-    private CosineSimilarity cosineSimilarity;
+
 
     private static final Logger log = Logger.getLogger("dsads");
 
     @Autowired
-    public MovieController(MovieService movieService, MovieDataset movieDataset, CosineSimilarity cosineSimilarity) {
+    public MovieController(MovieService movieService, MovieDataset movieDataset) {
 
         this.movieService = movieService;
         this.movieDataset = movieDataset;
-        this.cosineSimilarity = cosineSimilarity;
     }
 
     @RequestMapping(
@@ -58,4 +57,15 @@ public class MovieController {
     public List<Movie> getOffsetMovies(@PathVariable("start") int pageNumber) {
         return movieService.getMoviesOffset(pageNumber);
     }
+
+    @RequestMapping (
+            method = RequestMethod.GET,
+            value = "/similar/{movieId}",
+            produces = "application/json"
+    )
+    @ResponseBody
+    public List<Movie> getSimilarMovies(@PathVariable("movieId") long id) {
+        return movieService.getSimliarMovies(id);
+    }
+
 }

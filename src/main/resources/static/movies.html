@@ -73,18 +73,21 @@
     <!-- PRIKAZ FILMA -->
     <div ng-if="!moviesShow">
 
-        <div class="container">
+        <div class="container" style="position:relative;">
             <div class="row" >
                 <h1 style="text-align: center; color: aquamarine; margin-bottom: 3%;">{{movieToShow.title}}</h1>
                 <div class="col-md-4">
                     <div class="imgAbt">
+                        <div style="text-align: left;margin-bottom: 7%;">
+                            <a class="btn btn-sm btn-info hvr-icon-back" ng-click="showMovies()">Back to main</a>
+                        </div>
                         <img width="270" height="320" src="http://image.tmdb.org/t/p/original/{{movieToShow.posterPath}}" />
                     </div>
                 </div>
                 <div class="col-md-6" style="color: white">
                     <p>{{movieToShow.overview}}</p>
                     <br/>
-                    <span class="hvr-icon-spin" ng-click="facts()">Facts</span>
+                    <span class="hvr-icon-spin" ng-click="facts()" style="margin-bottom: 3%;font-size: 24px;">Facts</span>
                     <p class="slide-toggle-js" ng-if="factsShow">
                         <b style="font-size: 16px; color: #31acae"> Status: </b>{{movieToShow.status}}
                         <br/>
@@ -99,14 +102,27 @@
 
                     <br/>
                     <a class="btn btn-warning">Watch<span class="glyphicon glyphicon-play"></span></a>
-                    <a class="btn btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> </a>
+                    <a class="hvr-icon-bounce"></a>
                     <br/>
                     <br/>
                 </div>
             </div>
-            <div style="text-align: center">
-                <a class="btn btn-sm btn-info" ng-click="showMovies()">&laquo;</a>
+
+            <div style="margin-top: 5%;">
+                <h3 style="color: dodgerblue">Similar movies to watch</h3>
+                <hr>
+                <div class="row" ng-repeat="sim in similar">
+                    <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index])">
+                        <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
+                            <img src="http://image.tmdb.org/t/p/original/{{similar[$index].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
+                            <div class="caption">
+                                <p style="text-align: center; color: rgb(49,172,174); font-size: 15px"><b>{{similar[$index].title}}</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 

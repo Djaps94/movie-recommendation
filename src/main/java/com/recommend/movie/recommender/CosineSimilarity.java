@@ -1,5 +1,6 @@
 package com.recommend.movie.recommender;
 
+import com.recommend.movie.model.Movie;
 import com.recommend.movie.repository.GenreRepository;
 import com.recommend.movie.repository.MovieRepository;
 import no.uib.cipr.matrix.DenseMatrix;
@@ -46,7 +47,7 @@ public class CosineSimilarity {
         userSeen = new DenseMatrix(((Long)movieRows).intValue(), 1);
         userLikes = new DenseMatrix(((Long)movieRows).intValue(), 1);
         idf = new SparseVector(((Long)movieCols).intValue() -1);
-        //initialiseMovieMatrix(movieMatrix, idf);
+        initialiseMovieMatrix(movieMatrix, idf);
     }
 
     private void initialiseUserLikes(){
@@ -129,7 +130,7 @@ public class CosineSimilarity {
         return temp;
     }
 
-    public Map<Long, Double> calculatePredictionSeen(){
+    public List<Movie> calculatePredictionSeen(){
         Map<Long, Double> predictions = new TreeMap<>();
         for(int i = 0; i < tfIdf.numRows(); i++) {
             double result = 0;
@@ -138,11 +139,21 @@ public class CosineSimilarity {
             }
             predictions.put(((Integer)i).longValue()+1, result);
         }
-        Map returnMap = predictions.entrySet().stream()
+        Map<Long, Double> returnMap = predictions.entrySet().stream()
                                         .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, newValue) -> old, LinkedHashMap::new));
 
-        return returnMap;
+        List<Long> keys = returnMap.entrySet().stream().map(o -> o.getKey())
+                                                        .limit(10)
+                                                        .collect(Collectors.toList());
+
+        List<Movie> temp = new ArrayList<>();
+        for(Long key : keys){
+            Optional<Movie> movie = movieRepository.findById(key);
+            if(movie.isPresent())
+                temp.add(movie.get());
+        }
+        return temp;
     }
 
     public Map<Long, Double> calculatePrediction(){
@@ -156,6 +167,7 @@ public class CosineSimilarity {
         }
         Map returnMap = predictions.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .limit(5)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, newValue) -> old, LinkedHashMap::new));
 
         return returnMap;

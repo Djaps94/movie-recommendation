@@ -9,6 +9,7 @@ app.controller('movies',['$scope', 'factory', function ($scope, $factory) {
     $scope.factsShow = false;
 
     $scope.movies = [];
+    $scope.similar = [];
 
     $scope.loadPage = function (){
         $factory.getMoviesOffset($scope.pageNumber).then(
@@ -32,6 +33,11 @@ app.controller('movies',['$scope', 'factory', function ($scope, $factory) {
     $scope.showMovie = function (movieToShow) {
         $scope.moviesShow = false;
         $scope.movieToShow = movieToShow;
+        $factory.getSimilarMovies(movieToShow.id).then(
+            function success(response) {
+                $scope.similar = response.data;
+            }
+        );
     }
 
     $scope.showMovies = function () {
