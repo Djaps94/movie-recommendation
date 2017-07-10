@@ -174,6 +174,9 @@ public class CosineSimilarity {
     }
 
     public void addToSeen(Long movieId){
+        for(int i = 0; i < userSeen.numRows(); i++)
+            userSeen.set(i, 0, 0);
+
         userSeen.set(((Long)movieId).intValue()-1, 0, 1);
     }
 

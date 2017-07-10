@@ -20,4 +20,5 @@ public interface MovieService {
     public List<Movie> getSimliarMovies(long id);
 
     public List<Movie> searchMovie(int pageNumber, String title);
+
 }

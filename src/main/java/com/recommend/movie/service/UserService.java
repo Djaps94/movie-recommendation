@@ -16,5 +16,10 @@ public interface UserService {
 
     User logout(User user);
 
+    User register(User user);
+
     List<User> createUsers();
+
+    public boolean checkUser(String username);
+
 }

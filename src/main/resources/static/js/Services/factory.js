@@ -25,6 +25,14 @@ var app = angular.module('factory', []).factory('factory',function ($http) {
         });
     }
 
+    factory.register = function(user){
+        return $http({
+            method : 'POST',
+            url: "/users/register",
+            data : user
+        });
+    }
+
 
     return factory;
 });
