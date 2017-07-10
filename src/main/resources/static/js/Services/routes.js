@@ -1,6 +1,4 @@
-/**
- * Created by Sasa on 07-Jul-17.
- */
+
 
 var app = angular.module('routes',['ngRoute']);
 

@@ -1,5 +1,6 @@
 package com.recommend.movie.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sun.javafx.beans.IDProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,10 +20,12 @@ public class MovieRating {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "movie_id")
+    @JsonBackReference
     private Movie movie;
 
     @Column

@@ -12,9 +12,14 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    User login(User user);
+    User login(String username);
 
     User logout(User user);
 
+    User register(User user);
+
     List<User> createUsers();
+
+    public boolean checkUser(String username);
+
 }

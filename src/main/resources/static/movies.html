@@ -13,9 +13,17 @@
                     </div>
                 </div>
             </form>
+            <ul class = "nav navbar-nav">
+                <li>
+                    <a><span class="fa fa-film"></span> Recommendations</a>
+                </li>
+                <li>
+                    <a><span class="fa fa-star-o"></span> Top rated</a>
+                </li>
+            </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                <li><a ng-click="logout()"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
 
         </div>
@@ -79,7 +87,7 @@
                 <h1 style="text-align: center; color: aquamarine; margin-bottom: 3%;">{{movieToShow.title}}</h1>
                 <div class="col-md-4">
                     <div class="imgAbt">
-                        <img width="270" height="320" src="http://image.tmdb.org/t/p/original/{{movieToShow.posterPath}}" />
+                        <img class="hvr-glow" width="270" height="320" src="http://image.tmdb.org/t/p/original/{{movieToShow.posterPath}}" />
                     </div>
                 </div>
                 <div class="col-md-6" style="color: white">
