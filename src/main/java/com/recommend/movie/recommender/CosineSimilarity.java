@@ -144,7 +144,7 @@ public class CosineSimilarity {
                                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, newValue) -> old, LinkedHashMap::new));
 
         List<Long> keys = returnMap.entrySet().stream().map(o -> o.getKey())
-                                                        .limit(10)
+                                                        .limit(12)
                                                         .collect(Collectors.toList());
 
         List<Movie> temp = new ArrayList<>();

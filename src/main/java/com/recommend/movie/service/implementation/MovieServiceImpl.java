@@ -8,7 +8,6 @@ import com.recommend.movie.util.MovieDataset;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -55,9 +54,16 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<Movie> getMoviesOffset(int pageNumber) {
         Pageable pageable = new PageRequest(pageNumber, 20, Sort.Direction.ASC, "title");
-
         return movieRepository.findAllByTitleNotNull(pageable);
 
     }
+
+    @Override
+    public List<Movie> searchMovie(int pageNumber, String title) {
+        Pageable pageable = new PageRequest(pageNumber, 20, Sort.Direction.ASC, "title");
+        return movieRepository.findByTitleIgnoreCaseContainingOrderByTitle(title,pageable);
+    }
+
+
 
 }

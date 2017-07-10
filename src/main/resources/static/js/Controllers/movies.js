@@ -8,6 +8,9 @@ app.controller('movies',['$scope', 'factory', function ($scope, $factory) {
     $scope.pageNumber = 0;
     $scope.factsShow = false;
 
+    $scope.searchTitle = "";
+    var searchingTime = false;
+
     $scope.movies = [];
     $scope.similar = [];
 
@@ -26,7 +29,13 @@ app.controller('movies',['$scope', 'factory', function ($scope, $factory) {
             return;
         }
         $scope.pageNumber = newPageNumber;
-        $scope.loadPage();
+
+        if(searchingTime){
+            $scope.searchMovie();
+        }else{
+            $scope.loadPage();
+        }
+
     }
 
 
@@ -51,7 +60,26 @@ app.controller('movies',['$scope', 'factory', function ($scope, $factory) {
             $scope.factsShow = true;
     }
 
+    $scope.searchMovie = function () {
 
+        if($scope.searchTitle.trim() === ""){
+            $scope.pageNumber = 0;
+            searchingTime = false;
+            $scope.loadPage();
+            return;
+        }
+
+        if(!searchingTime){
+            $scope.pageNumber = 0;
+            searchingTime = true;
+        }
+
+        $factory.searchMovie($scope.pageNumber,$scope.searchTitle).then(
+            function success(response) {
+                $scope.movies = response.data;
+            }
+        );
+    }
 
 
 }]);

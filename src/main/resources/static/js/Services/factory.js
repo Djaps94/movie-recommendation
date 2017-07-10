@@ -17,6 +17,15 @@ var app = angular.module('factory', []).factory('factory',function ($http) {
         });
     }
 
+    factory.searchMovie = function (pageNumber,movieTitle) {
+        return $http({
+            method: 'GET',
+            url: "/movies/search/"+pageNumber+"/"+movieTitle
+
+        });
+    }
+
+
     return factory;
 });
 

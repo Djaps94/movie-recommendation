@@ -21,5 +21,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     List<Movie> findAllByTitleNotNull(Pageable pageable);
 
+    List<Movie> findByTitleIgnoreCaseContainingOrderByTitle(String title, Pageable pageable);
+
     long count();
 }
