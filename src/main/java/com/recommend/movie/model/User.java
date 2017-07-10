@@ -2,6 +2,8 @@ package com.recommend.movie.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,7 +29,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    @JsonBackReference
+    @JsonIgnore
     private Set<MovieRating> movieRatings = new HashSet<>();
 
     public User(String username, String password){
