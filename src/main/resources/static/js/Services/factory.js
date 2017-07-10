@@ -3,6 +3,9 @@ var app = angular.module('factory', []).factory('factory',function ($http) {
 
     var factory = {};
 
+
+    //MOVIES
+
     factory.getMoviesOffset = function (startCount) {
         return $http({
             method: 'GET',
@@ -25,6 +28,17 @@ var app = angular.module('factory', []).factory('factory',function ($http) {
         });
     }
 
+    factory.getMovieRatings= function(movie){
+        return $http({
+            method: 'GET',
+            url: "/rating/"+movie.id
+        });
+    }
+
+
+
+    // USERS
+
     factory.register = function(username, password){
         return $http({
             method : 'POST',
@@ -38,6 +52,7 @@ var app = angular.module('factory', []).factory('factory',function ($http) {
             url : "/users/login/"+username+"/"+password,
         });
     }
+
 
 
     return factory;

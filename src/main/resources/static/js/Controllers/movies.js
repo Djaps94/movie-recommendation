@@ -46,6 +46,14 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
         $scope.showMovie = function (movieToShow) {
             $scope.moviesShow = false;
             $scope.movieToShow = movieToShow;
+
+            $factory.getMovieRatings(movieToShow).then(
+                function success(response) {
+                    $scope.movieToShow.movieRatings = response.data;
+                    $scope.calculateTrueRating();
+                }
+            )
+
             $factory.getSimilarMovies(movieToShow.id).then(
                 function success(response) {
                     $scope.similar = response.data;
@@ -75,6 +83,7 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
 
             if (!searchingTime) {
                 $scope.pageNumber = 0;
+                $scope.moviesShow = true;
                 searchingTime = true;
             }
 
@@ -89,6 +98,25 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
             localStorage.removeItem("user");
             $location.path('login');
         }
+
+
+        $scope.calculateTrueRating = function () {
+            $scope.trueMovieRating = 0;
+            var sum = 0;
+
+            if($scope.movieToShow.movieRatings.length == 0) {
+                return;
+            }
+
+            for(var rating in $scope.movieToShow.movieRatings){
+                sum += $scope.movieToShow.movieRatings[rating].rating;
+            }
+
+            $scope.trueMovieRating = sum / $scope.movieToShow.movieRatings.length;
+
+        }
+
+
     }
 
 }]);

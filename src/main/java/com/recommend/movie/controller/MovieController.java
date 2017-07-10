@@ -2,6 +2,7 @@ package com.recommend.movie.controller;
 
 
 import com.recommend.movie.model.Movie;
+import com.recommend.movie.model.MovieRating;
 import com.recommend.movie.recommender.CosineSimilarity;
 import com.recommend.movie.service.MovieService;
 import com.recommend.movie.util.MovieDataset;
@@ -78,6 +79,5 @@ public class MovieController {
     public List<Movie> searchMovie(@PathVariable("pageNumber") int pageNumber,@PathVariable("movieTitle") String movieTitle){
         return movieService.searchMovie(pageNumber,movieTitle);
     }
-
 
 }

@@ -11,4 +11,6 @@ public interface RatingService {
 
     public List<MovieRating> getRatings();
 
+    public List<MovieRating> getMovieRating(long movieID);
+
 }

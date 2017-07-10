@@ -9,12 +9,10 @@ import com.recommend.movie.repository.UserRepository;
 import com.recommend.movie.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping(value = "rating")
@@ -24,6 +22,8 @@ public class RatingController {
     private UserRepository userRepository;
     private MovieRepository movieRepository;
     private RatingRepository ratingRepository;
+
+    private static final Logger log = Logger.getLogger("dsads");
 
     @Autowired
     public RatingController(RatingService ratingService, UserRepository userRepository, MovieRepository movieRepository, RatingRepository ratingRepository){
@@ -62,5 +62,17 @@ public class RatingController {
         }
         return ratings;
     }
+
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/{movieID}",
+            produces = "application/json"
+    )
+    @ResponseBody
+    public List<MovieRating> getRatings(@PathVariable("movieID") long movieID){
+        return ratingService.getMovieRating(movieID);
+    }
+
+
 
 }

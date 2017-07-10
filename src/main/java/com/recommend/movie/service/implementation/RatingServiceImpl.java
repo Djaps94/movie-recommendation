@@ -31,4 +31,9 @@ public class RatingServiceImpl implements RatingService{
         List<MovieRating> ratings = ratingDataset.createRatings();
         return ratings;
     }
+
+    @Override
+    public List<MovieRating> getMovieRating(long movieID) {
+        return ratingRepository.findByMovie_id(movieID);
+    }
 }
