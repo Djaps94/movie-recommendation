@@ -4,10 +4,10 @@
         <div class="container-fluid">
             <form class="navbar-form navbar-left">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input type="text" class="form-control" ng-model="searchTitle" placeholder="Search">
 
                     <div class="input-group-btn">
-                        <button class="btn btn-default" type="submit">
+                        <button class="btn btn-default" ng-click="searchMovie()" type="submit">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>
                     </div>
@@ -25,7 +25,7 @@
     <div ng-if="moviesShow" style="position: relative;">
         <div class="row" style="margin-bottom: 1%;" ng-repeat="movie in movies">
             <div ng-if="!($index % 4)">
-                <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index])">
+                <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index])" ng-if="($index < movies.length)">
                     <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
                             <img src="http://image.tmdb.org/t/p/original/{{movies[$index].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                             <div class="caption">
@@ -33,7 +33,7 @@
                             </div>
                     </div>
                 </div>
-                <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index+1])">
+                <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index+1])" ng-if="($index+1 < movies.length)">
                     <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
                         <img src="http://image.tmdb.org/t/p/original/{{movies[$index+1].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                         <div class="caption">
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index+2])">
+                <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index+2])" ng-if="($index+2 < movies.length)">
                     <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
                         <img src="http://image.tmdb.org/t/p/original/{{movies[$index+2].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                         <div class="caption">
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index+3])">
+                <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index+3])" ng-if="($index+3 < movies.length)">
                     <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
                         <img src="http://image.tmdb.org/t/p/original/{{movies[$index+3].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                         <div class="caption">
@@ -113,7 +113,7 @@
                 <hr>
                 <div class="row" ng-repeat="sim in similar">
                     <div ng-if="!($index%4)">
-                        <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index])">
+                        <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index])" ng-if="($index < movies.length)">
                             <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
                                 <img src="http://image.tmdb.org/t/p/original/{{similar[$index].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                                 <div class="caption">
@@ -121,15 +121,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index+1])">
-                            <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
+                        <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index+1])" ng-if="($index+1 < movies.length)">
+                            <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)" >
                                 <img src="http://image.tmdb.org/t/p/original/{{similar[$index+1].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                                 <div class="caption">
                                     <p style="text-align: center; color: rgb(49,172,174); font-size: 15px"><b>{{similar[$index+1].title}}</b></p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index+2])">
+                        <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index+2])" ng-if="($index+2 < movies.length)">
                             <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
                                 <img src="http://image.tmdb.org/t/p/original/{{similar[$index+2].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                                 <div class="caption">
@@ -137,7 +137,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index+3])">
+                        <div class="col-md-3 hvr-grow" ng-click="showMovie(similar[$index+3])" ng-if="($index+3 < movies.length)">
                             <div class="thumbnail" style="background-image: url(images/WindowsXP.jpg)">
                                 <img src="http://image.tmdb.org/t/p/original/{{similar[$index+3].posterPath}}" width="20%" height="20%" alt="ime filma" style="width: 100%">
                                 <div class="caption">

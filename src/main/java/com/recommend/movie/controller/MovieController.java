@@ -68,4 +68,16 @@ public class MovieController {
         return movieService.getSimliarMovies(id);
     }
 
+
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/search/{pageNumber}/{movieTitle}",
+            produces = "application/json"
+    )
+    @ResponseBody
+    public List<Movie> searchMovie(@PathVariable("pageNumber") int pageNumber,@PathVariable("movieTitle") String movieTitle){
+        return movieService.searchMovie(pageNumber,movieTitle);
+    }
+
+
 }

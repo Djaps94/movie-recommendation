@@ -18,4 +18,6 @@ public interface MovieService {
     List<Movie> getMovies();
 
     public List<Movie> getSimliarMovies(long id);
+
+    public List<Movie> searchMovie(int pageNumber, String title);
 }
