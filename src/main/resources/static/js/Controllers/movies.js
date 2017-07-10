@@ -4,13 +4,15 @@ var app = angular.module('movies',[]);
 
 app.controller('movies',['$scope', 'factory','$location', function ($scope, $factory, $location) {
 
-    if(localStorage.getItem("user") == null) {
+    if(JSON.parse(localStorage.getItem("user")) == null) {
         $location.path('login');
     }else {
 
         $scope.moviesShow = true;
         $scope.pageNumber = 0;
         $scope.factsShow = false;
+
+        $scope.user = JSON.parse(localStorage.getItem("user"));
 
         $scope.searchTitle = "";
         var searchingTime = false;
@@ -93,6 +95,23 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
                 }
             );
         }
+
+
+        $scope.rateMovie = function (rate) {
+            if($scope.user == null || $scope.user == ""){
+                alert("User is null");
+                return;
+            }
+
+            $factory.rateMovie($scope.movieToShow.id, $scope.user.id, rate).then(
+                function success(response) {
+                    alert(response.data);
+                    $scope.showMovie($scope.movieToShow);
+                }
+            );
+
+        }
+
 
         $scope.logout = function() {
             localStorage.removeItem("user");

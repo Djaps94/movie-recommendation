@@ -13,4 +13,5 @@ public interface RatingService {
 
     public List<MovieRating> getMovieRating(long movieID);
 
+    public String rateMovie(long movieID, long userID, float rate);
 }

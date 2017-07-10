@@ -28,14 +28,21 @@ var app = angular.module('factory', []).factory('factory',function ($http) {
         });
     }
 
-    factory.getMovieRatings= function(movie){
+    // RATING
+
+    factory.getMovieRatings = function(movie){
         return $http({
             method: 'GET',
             url: "/rating/"+movie.id
         });
     }
 
-
+    factory.rateMovie = function (movieID, userID, rate) {
+        return $http({
+            method: 'POST',
+            url: "/rating/rate/"+movieID+"/"+userID+"/"+rate
+        });
+    }
 
     // USERS
 

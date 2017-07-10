@@ -73,6 +73,14 @@ public class RatingController {
         return ratingService.getMovieRating(movieID);
     }
 
-
+    @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/rate/{movieID}/{userID}/{rateValue}",
+            produces = "text/plain"
+    )
+    @ResponseBody
+    public String rateMovie(@PathVariable("movieID") long movieID, @PathVariable("userID") long userID, @PathVariable("rateValue") float rate){
+        return ratingService.rateMovie(movieID, userID, rate);
+    }
 
 }
