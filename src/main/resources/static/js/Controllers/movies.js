@@ -84,6 +84,11 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
                 }
             );
         }
+
+        $scope.logout = function() {
+            localStorage.removeItem("user");
+            $location.path('login');
+        }
     }
 
 }]);
