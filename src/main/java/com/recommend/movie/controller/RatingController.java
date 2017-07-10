@@ -79,7 +79,7 @@ public class RatingController {
             produces = "text/plain"
     )
     @ResponseBody
-    public String rateMovie(@PathVariable("movieID") long movieID, @PathVariable("userID") long userID, @PathVariable("rateValue") float rate){
+    public MovieRating rateMovie(@PathVariable("movieID") long movieID, @PathVariable("userID") long userID, @PathVariable("rateValue") float rate){
         return ratingService.rateMovie(movieID, userID, rate);
     }
 

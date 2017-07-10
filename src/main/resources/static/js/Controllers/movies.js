@@ -4,9 +4,8 @@ var app = angular.module('movies',[]);
 
 app.controller('movies',['$scope', 'factory','$location', function ($scope, $factory, $location) {
 
-    if(JSON.parse(localStorage.getItem("user")) == null) {
+    if(localStorage.getItem("user") == null)
         $location.path('login');
-    }else {
 
         $scope.moviesShow = true;
         $scope.pageNumber = 0;
@@ -105,11 +104,15 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
 
             $factory.rateMovie($scope.movieToShow.id, $scope.user.id, rate).then(
                 function success(response) {
-                    alert(response.data);
-                    $scope.showMovie($scope.movieToShow);
+                    if(response.data === "")
+                        alert("You've already rated!");
+                    else {
+                        alert("You've just rated this movie");
+                        $scope.showMovie($scope.movieToShow);
+                    }
                 }
             );
-
+            return false;
         }
 
 
@@ -134,8 +137,5 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
             $scope.trueMovieRating = sum / $scope.movieToShow.movieRatings.length;
 
         }
-
-
-    }
 
 }]);

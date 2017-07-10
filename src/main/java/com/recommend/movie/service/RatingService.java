@@ -9,9 +9,9 @@ public interface RatingService {
 
     void saveRating(MovieRating rating);
 
-    public List<MovieRating> getRatings();
+    List<MovieRating> getRatings();
 
-    public List<MovieRating> getMovieRating(long movieID);
+    List<MovieRating> getMovieRating(long movieID);
 
-    public String rateMovie(long movieID, long userID, float rate);
+    MovieRating rateMovie(long movieID, long userID, float rate);
 }
