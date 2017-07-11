@@ -3,6 +3,7 @@ package com.recommend.movie.service.implementation;
 import com.recommend.movie.model.Movie;
 import com.recommend.movie.model.MovieRating;
 import com.recommend.movie.recommender.CosineSimilarity;
+import com.recommend.movie.recommender.EuclideanSimilarity;
 import com.recommend.movie.repository.MovieRepository;
 import com.recommend.movie.repository.RatingRepository;
 import com.recommend.movie.service.MovieService;
@@ -23,14 +24,16 @@ public class MovieServiceImpl implements MovieService {
     private MovieDataset movieDataset;
     private CosineSimilarity cosineSimilarity;
     private RatingRepository ratingRepository;
+    private EuclideanSimilarity euclideanSimilarity;
 
     private static final Logger log = Logger.getLogger("dsads");
 
-    public MovieServiceImpl(MovieRepository movieRepository, MovieDataset movieDataset, CosineSimilarity cosineSimilarity, RatingRepository ratingRepository){
+    public MovieServiceImpl(MovieRepository movieRepository, MovieDataset movieDataset, CosineSimilarity cosineSimilarity, RatingRepository ratingRepository, EuclideanSimilarity euclideanSimilarity){
         this.movieRepository = movieRepository;
         this.movieDataset = movieDataset;
         this.ratingRepository = ratingRepository;
         this.cosineSimilarity = cosineSimilarity;
+        this.euclideanSimilarity = euclideanSimilarity;
     }
 
     @Override
@@ -126,6 +129,17 @@ public class MovieServiceImpl implements MovieService {
 //            i++;
 //        }
 
+        return movies;
+    }
+
+    public Set<Movie> ratedMovies(){
+        List<Movie> jaccardMovie = euclideanSimilarity.calculatePredictions();
+        Set<Movie> movies = new HashSet<>();
+        movies.addAll(cosineSimilarity.calculatePrediction());
+        for(int i = 0; i < 4; i++){
+            int rnd = new Random().nextInt(jaccardMovie.size());
+            movies.add(jaccardMovie.get(rnd));
+        }
         return movies;
     }
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 
@@ -89,6 +90,16 @@ public class MovieController {
     @ResponseBody
     public List<Movie> topRated(@PathVariable("pageNumber") int pageNumber){
         return movieService.topRated(pageNumber);
+    }
+
+    @RequestMapping (
+            method = RequestMethod.GET,
+            value = "/recommended",
+            produces = "application/json"
+    )
+    @ResponseBody
+    public Set<Movie> getRecommended(){
+        return movieService.ratedMovies();
     }
 
 

@@ -4,6 +4,7 @@ package com.recommend.movie.service;
 import com.recommend.movie.model.Movie;
 
 import java.util.List;
+import java.util.Set;
 
 public interface MovieService {
 
@@ -17,10 +18,13 @@ public interface MovieService {
 
     List<Movie> getMovies();
 
-    public List<Movie> getSimliarMovies(long id);
+    List<Movie> getSimliarMovies(long id);
 
-    public List<Movie> searchMovie(int pageNumber, String title);
+    List<Movie> searchMovie(int pageNumber, String title);
 
-    public List<Movie> topRated(int pageNumber);
+    List<Movie> topRated(int pageNumber);
+
+    Set<Movie> ratedMovies();
+
 
 }

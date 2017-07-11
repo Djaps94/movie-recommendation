@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
             Optional<User> u = userRepository.findByUsername(username);
             if(u.isPresent()) {
                 cosineSimilarity.initialiseUserLikes(u.get().getId());
-                euclideanSimilarity.initialiseUserVector(u.get().getId());
+                euclideanSimilarity.initialiseUserJaccardVector(u.get().getId());
                 return u.get();
             }
         }

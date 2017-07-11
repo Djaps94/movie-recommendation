@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @Controller
@@ -28,7 +29,7 @@ public class RatingController {
     private static final Logger log = Logger.getLogger("dsads");
 
     @Autowired
-    public RatingController(RatingService ratingService, UserRepository userRepository, MovieRepository movieRepository, RatingRepository ratingRepository, EuclideanSimilarity euclideanSimilarity){
+    public RatingController(RatingService ratingService, UserRepository userRepository, MovieRepository movieRepository, RatingRepository ratingRepository){
 
         this.ratingService = ratingService;
         this.userRepository = userRepository;
@@ -85,5 +86,4 @@ public class RatingController {
     public MovieRating rateMovie(@PathVariable("movieID") long movieID, @PathVariable("userID") long userID, @PathVariable("rateValue") float rate) {
         return ratingService.rateMovie(movieID, userID, rate);
     }
-
 }

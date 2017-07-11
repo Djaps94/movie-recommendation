@@ -1,9 +1,11 @@
 package com.recommend.movie.service;
 
 
+import com.recommend.movie.model.Movie;
 import com.recommend.movie.model.MovieRating;
 
 import java.util.List;
+import java.util.Set;
 
 public interface RatingService {
 
@@ -14,4 +16,5 @@ public interface RatingService {
     List<MovieRating> getMovieRating(long movieID);
 
     MovieRating rateMovie(long movieID, long userID, float rate);
+
 }

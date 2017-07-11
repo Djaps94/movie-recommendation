@@ -54,6 +54,18 @@ public class EuclideanSimilarity {
         ratings.stream().forEach(rating -> user.set(rating.getMovie().getId().intValue(), rating.getRating()));
     }
 
+    public void initialiseUserJaccardVector(long id){
+        user.set(0, id);
+        List<MovieRating> ratings = ratingRepository.findAllByUser_id(id);
+        ratings.stream().forEach(rating -> {
+            if(rating.getRating() >= 2.5)
+                user.set(rating.getMovie().getId().intValue(), 1);
+            else
+                user.set(rating.getMovie().getId().intValue(), 0);
+            }
+        );
+    }
+
     private SparseVector initialiseUsersVectors(int i){
         SparseVector userCompare = new SparseVector(size, size);
         userCompare.set(0, i);
@@ -62,6 +74,17 @@ public class EuclideanSimilarity {
             return null;
         ratings.stream().forEach(rating -> userCompare.set(rating.getMovie().getId().intValue(), rating.getRating()));
         return userCompare;
+    }
+
+    private double euclideanSimilarity(SparseVector user, SparseVector target){
+        if(target == null)
+            return 0;
+        int sum = 0;
+        for(int i = 1; i < user.size(); i++){
+            sum += Math.pow(user.get(i) - target.get(i), 2);
+        }
+        double distance = Math.sqrt(sum);
+        return 1/(1+distance);
     }
 
     private SparseVector jaccardVectors(int i){
@@ -75,20 +98,8 @@ public class EuclideanSimilarity {
                 userCompare.set(rating.getMovie().getId().intValue(), 1);
             else
                 userCompare.set(rating.getMovie().getId().intValue(), 0);
-            });
+        });
         return userCompare;
-    }
-
-
-    private double euclideanSimilarity(SparseVector user, SparseVector target){
-        if(target == null)
-            return 0;
-        int sum = 0;
-        for(int i = 1; i < user.size(); i++){
-            sum += Math.pow(user.get(i) - target.get(i), 2);
-        }
-        double distance = Math.sqrt(sum);
-        return 1/(1+distance);
     }
 
     private double jaccardSimilarity(SparseVector user, SparseVector target){
@@ -103,9 +114,6 @@ public class EuclideanSimilarity {
                 m00++;
         }
         double distance = (user.size() + target.size() - 2*(m11+m00))/(user.size() + target.size() - (m00 + m11));
-        logger.info("m00: "+String.valueOf(m00));
-        logger.info("m11: "+String.valueOf(m11));
-        logger.info("distance: "+String.valueOf(distance));
         return 1-distance;
     }
 
@@ -127,8 +135,10 @@ public class EuclideanSimilarity {
         return movies;
     }
 
-    public List<Movie> test(){
-        return calculatePredictions();
+    public void addToUserVector(int movieId, float rating){
+        if(rating >= 2.5)
+            user.set(movieId, 1);
+        else
+            user.set(movieId, 0);
     }
-
 }
