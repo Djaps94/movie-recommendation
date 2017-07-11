@@ -138,7 +138,13 @@ public class CosineSimilarity {
 
     public List<Movie> calculatePredictionSeen(){
         Map<Long, Double> predictions = new TreeMap<>();
-        setPredictions(predictions);
+        for(int i = 0; i < tfIdf.numRows(); i++) {
+            double result = 0;
+            for (int j = 0; j < userProfileSeen.size(); j++) {
+                result += userProfileSeen.get(j) * tfIdf.get(i,j);
+            }
+            predictions.put(((Integer)i).longValue()+1, result);
+        }
         Map<Long, Double> returnMap = predictions.entrySet().stream()
                                         .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, newValue) -> old, LinkedHashMap::new));
@@ -158,7 +164,13 @@ public class CosineSimilarity {
 
     public List<Movie> calculatePrediction(){
         Map<Long, Double> predictions = new TreeMap<>();
-        setPredictions(predictions);
+        for(int i = 0; i < tfIdf.numRows(); i++) {
+            double result = 0;
+            for (int j = 0; j < userProfile.size(); j++) {
+                result += userProfile.get(j) * tfIdf.get(i,j);
+            }
+            predictions.put(((Integer)i).longValue()+1, result);
+        }
         Map<Long, Double> returnMap = predictions.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, newValue) -> old, LinkedHashMap::new));
@@ -177,16 +189,6 @@ public class CosineSimilarity {
 
 
         return temp;
-    }
-
-    private void setPredictions(Map<Long, Double> predictions){
-        for(int i = 0; i < tfIdf.numRows(); i++) {
-            double result = 0;
-            for (int j = 0; j < userProfile.size(); j++) {
-                result += userProfile.get(j) * tfIdf.get(i,j);
-            }
-            predictions.put(((Integer)i).longValue()+1, result);
-        }
     }
 
     public void addToSeen(Long movieId){

@@ -110,6 +110,7 @@ public class MovieServiceImpl implements MovieService {
     public Set<Movie> ratedMovies(){
         List<Movie> jaccardMovie = euclideanSimilarity.calculatePredictions();
         Set<Movie> movies = new HashSet<>();
+        cosineSimilarity.calculateUserLikes();
         movies.addAll(cosineSimilarity.calculatePrediction());
         for(int i = 0; i < 4; i++){
             int rnd = new Random().nextInt(jaccardMovie.size());

@@ -24,6 +24,7 @@ public class RatingServiceImpl implements RatingService{
     private UserRepository userRepository;
     private MovieRepository movieRepository;
     private CosineSimilarity cosineSimilarity;
+    private EuclideanSimilarity euclideanSimilarity;
 
 
     @Autowired
@@ -33,6 +34,7 @@ public class RatingServiceImpl implements RatingService{
         this.movieRepository = movieRepository;
         this.userRepository = userRepository;
         this.cosineSimilarity = cosineSimilarity;
+        this.euclideanSimilarity = euclideanSimilarity;
 
     }
 
@@ -80,7 +82,7 @@ public class RatingServiceImpl implements RatingService{
         if(rate >= 3)
             cosineSimilarity.addToProfile(movieID);
 
-
+        euclideanSimilarity.addToUserVector(((Long)movieID).intValue(), rate);
 
         return newMovieRating;
     }
