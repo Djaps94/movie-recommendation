@@ -32,7 +32,11 @@
 
     <!-- PRIKAZ FILMOVA -->
     <div ng-if="moviesShow" style="position: relative;">
-        <div ng-if="loatingTime">
+        <div ng-if="recommendedTime && !loadingTime">
+            <a class="btn btn-sm btn-info hvr-icon-back" ng-click="nextPage(0)">Back to main</a>
+        </div>
+        <br/>
+        <div ng-if="loadingTime">
             <h3 style="color: dodgerblue; text-align: center">Loading...</h3>
             <hr>
         </div>

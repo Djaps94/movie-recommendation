@@ -10,7 +10,7 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
     $scope.moviesShow = true;
     $scope.pageNumber = 0;
     $scope.factsShow = false;
-    $scope.loatingTime = false;
+    $scope.loadingTime = false;
     $scope.user = JSON.parse(localStorage.getItem("user"));
 
     $scope.searchTitle = "";
@@ -30,6 +30,8 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
     $scope.loadPage();
 
     $scope.nextPage = function (newPageNumber) {
+        $scope.recommendedTime = false;
+
         if (newPageNumber > 455 || newPageNumber < 0) {
             return;
         }
@@ -144,11 +146,15 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
     $scope.topRated = function () {
         $scope.moviesShow = true;
         $scope.pageNumber = 0;
-        $scope.recommendedTime = false;
+        searchingTime = false;
+        $scope.recommendedTime = true;
+        $scope.movies = [];
+        $scope.loadingTime = true;
+
         $factory.mostRated($scope.pageNumber).then(
             function success(response) {
-                alert("vratih se");
-                var s = response.data;
+                $scope.movies = response.data;
+                $scope.loadingTime = false;
             }
         )
 
@@ -162,12 +168,12 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
         searchingTime = false;
         $scope.recommendedTime = true;
         $scope.movies = [];
-        $scope.loatingTime = true;
+        $scope.loadingTime = true;
 
         $factory.getRecommended().then(
             function success(response) {
                 $scope.movies = response.data;
-                $scope.loatingTime = false;
+                $scope.loadingTime = false;
             }
 
         )

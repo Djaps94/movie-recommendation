@@ -100,7 +100,7 @@ public class MovieServiceImpl implements MovieService {
 
 
         List<Movie> moviesToReturn = sorted.entrySet().stream().map(o -> o.getKey())
-                .limit(10)
+                .limit(12)
                 .collect(Collectors.toList());
 
 
