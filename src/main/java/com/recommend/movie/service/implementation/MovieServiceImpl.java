@@ -78,49 +78,55 @@ public class MovieServiceImpl implements MovieService {
 
         log.info("Usao sam u top rated");
 
-        List<Movie> movies = movieRepository.findAll();
-        HashMap<Movie, Float> movieRatings = new HashMap<Movie, Float>();
-
-        for(Movie m : movies){
-            log.info("U FORU SAM");
-            List<MovieRating> ratings = ratingRepository.findByMovie_id(m.getId());
-
-            float sum = 0;
-            for(MovieRating mr : ratings){
-                sum += mr.getRating();
-            }
-
-            movieRatings.put(m, sum / ratings.size());
+        List<Movie> movies = new ArrayList<>();
+        HashMap<Movie, Double> movieRatings = new HashMap<>();
+        List<Object[]>value = ratingRepository.getRatedMovies(1);
+        for(Object[] obj : value){
+            log.info(String.valueOf(obj[0])+"---"+String.valueOf(obj[1]));
         }
+//        for(Movie m : movies){
+//            log.info("U FORU SAM");
+//            if(!ratingRepository.existsByMovie_id(m.getId()))
+//                continue;
+//
+//            List<MovieRating> ratings = ratingRepository.findByMovie_id(m.getId());
+//
+//            double sum = ratings.parallelStream().mapToDouble(r -> r.getRating()).sum();
+//
+//            movieRatings.put(m, sum / ratings.size());
+//        }
+//
+//        log.info("IZASAO IZ FORA");
+//
+//        HashMap<Movie, Double> sorted = movieRatings.entrySet().stream().
+//                sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
+//                .collect(Collectors.toMap(
+//                        Map.Entry::getKey,
+//                        Map.Entry::getValue,
+//                        (e1, e2) -> e1,
+//                        LinkedHashMap::new
+//                ));
+//
+//
+////        int i = 0;
+//        List<Movie> moviesToReturn = sorted.entrySet().stream().map(o -> o.getKey())
+//                                                    .limit(10)
+//                                                    .collect(Collectors.toList());
+//
+//        for(Movie m : sorted.keySet()){
+//
+//            if(i >= 20*pageNumber+20){
+//                break;
+//            }
+//
+//            if(i >= 20*pageNumber){
+//                movesToReturn.add(m);
+//            }
+//
+//            i++;
+//        }
 
-        log.info("IZASAO IZ FORA");
-
-        HashMap<Movie, Float> sorted = movieRatings.entrySet().stream().
-                sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
-                ));
-
-        List<Movie> movesToReturn = new ArrayList<Movie>();
-        int i = 0;
-
-        for(Movie m : sorted.keySet()){
-
-            if(i >= 20*pageNumber+20){
-                break;
-            }
-
-            if(i >= 20*pageNumber){
-                movesToReturn.add(m);
-            }
-
-            i++;
-        }
-
-        return movesToReturn;
+        return movies;
     }
 
 
