@@ -1,15 +1,20 @@
 package com.recommend.movie.service.implementation;
 
 import com.recommend.movie.model.Movie;
+import com.recommend.movie.model.MovieRating;
 import com.recommend.movie.recommender.CosineSimilarity;
 import com.recommend.movie.repository.MovieRepository;
+import com.recommend.movie.repository.RatingRepository;
 import com.recommend.movie.service.MovieService;
 import com.recommend.movie.util.MovieDataset;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import java.util.*;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -17,10 +22,14 @@ public class MovieServiceImpl implements MovieService {
     private MovieRepository movieRepository;
     private MovieDataset movieDataset;
     private CosineSimilarity cosineSimilarity;
+    private RatingRepository ratingRepository;
 
-    public MovieServiceImpl(MovieRepository movieRepository, MovieDataset movieDataset, CosineSimilarity cosineSimilarity){
+    private static final Logger log = Logger.getLogger("dsads");
+
+    public MovieServiceImpl(MovieRepository movieRepository, MovieDataset movieDataset, CosineSimilarity cosineSimilarity, RatingRepository ratingRepository){
         this.movieRepository = movieRepository;
         this.movieDataset = movieDataset;
+        this.ratingRepository = ratingRepository;
         this.cosineSimilarity = cosineSimilarity;
     }
 
@@ -64,6 +73,61 @@ public class MovieServiceImpl implements MovieService {
         return movieRepository.findByTitleIgnoreCaseContainingOrderByTitle(title,pageable);
     }
 
+    @Override
+    public List<Movie> topRated(int pageNumber) {
+
+        log.info("Usao sam u top rated");
+
+        List<Movie> movies = new ArrayList<>();
+        HashMap<Movie, Double> movieRatings = new HashMap<>();
+        List<Object[]>value = ratingRepository.getRatedMovies(1);
+        for(Object[] obj : value){
+            log.info(String.valueOf(obj[0])+"---"+String.valueOf(obj[1]));
+        }
+//        for(Movie m : movies){
+//            log.info("U FORU SAM");
+//            if(!ratingRepository.existsByMovie_id(m.getId()))
+//                continue;
+//
+//            List<MovieRating> ratings = ratingRepository.findByMovie_id(m.getId());
+//
+//            double sum = ratings.parallelStream().mapToDouble(r -> r.getRating()).sum();
+//
+//            movieRatings.put(m, sum / ratings.size());
+//        }
+//
+//        log.info("IZASAO IZ FORA");
+//
+//        HashMap<Movie, Double> sorted = movieRatings.entrySet().stream().
+//                sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
+//                .collect(Collectors.toMap(
+//                        Map.Entry::getKey,
+//                        Map.Entry::getValue,
+//                        (e1, e2) -> e1,
+//                        LinkedHashMap::new
+//                ));
+//
+//
+////        int i = 0;
+//        List<Movie> moviesToReturn = sorted.entrySet().stream().map(o -> o.getKey())
+//                                                    .limit(10)
+//                                                    .collect(Collectors.toList());
+//
+//        for(Movie m : sorted.keySet()){
+//
+//            if(i >= 20*pageNumber+20){
+//                break;
+//            }
+//
+//            if(i >= 20*pageNumber){
+//                movesToReturn.add(m);
+//            }
+//
+//            i++;
+//        }
+
+        return movies;
+    }
 
 
 }

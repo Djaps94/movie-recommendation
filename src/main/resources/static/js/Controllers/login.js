@@ -29,12 +29,13 @@ app.controller('login', ['$scope', 'factory', '$location', '$timeout', function 
                 if(response.data === "" || response.data == null)
                     return;
 
-                localStorage.setItem("user", response.data);
+                localStorage.setItem("user", JSON.stringify(response.data));
                 $timeout(function(){
                     $location.path('movies')
                 }, 1000);
                 $scope.username = "";
                 $scope.password = "";
+
             }
         );
     }

@@ -1,3 +1,4 @@
+
 <div class="container">
 
     <nav class="navbar navbar-inverse">
@@ -18,7 +19,7 @@
                     <a><span class="fa fa-film"></span> Recommendations</a>
                 </li>
                 <li>
-                    <a><span class="fa fa-star-o"></span> Top rated</a>
+                    <a ng-click="topRated()"><span class="fa fa-star-o"></span> Top rated</a>
                 </li>
             </ul>
 
@@ -92,6 +93,13 @@
                 </div>
                 <div class="col-md-6" style="color: white">
                     <p>{{movieToShow.overview}}</p>
+                    <a> <span ng-click="rateMovie(1)" ng-class="{'glyphicon glyphicon-star-empty': (trueMovieRating < 1), 'glyphicon glyphicon-star': (trueMovieRating >= 1)}"></span></a>
+                    <a> <span ng-click="rateMovie(2)" ng-class="{'glyphicon glyphicon-star-empty': (trueMovieRating < 2), 'glyphicon glyphicon-star': (trueMovieRating >= 2)}"></span></a>
+                    <a> <span ng-click="rateMovie(3)" ng-class="{'glyphicon glyphicon-star-empty': (trueMovieRating < 3), 'glyphicon glyphicon-star': (trueMovieRating >= 3)}"></span></a>
+                    <a> <span ng-click="rateMovie(4)" ng-class="{'glyphicon glyphicon-star-empty': (trueMovieRating < 4), 'glyphicon glyphicon-star': (trueMovieRating >= 4)}"></span></a>
+                    <a> <span ng-click="rateMovie(5)" ng-class="{'glyphicon glyphicon-star-empty': (trueMovieRating < 5), 'glyphicon glyphicon-star': (trueMovieRating >= 5)}"></span></a>
+                    <a> &nbsp; {{trueMovieRating | number: 2}} </a>
+
                     <br/>
                     <span class="hvr-icon-spin" ng-click="facts()" style="margin-bottom: 3%;font-size: 24px;">Facts</span>
                     <p class="slide-toggle-js" ng-if="factsShow">
@@ -110,7 +118,6 @@
 
                     <br/>
                     <a class="btn btn-warning">Watch<span class="glyphicon glyphicon-play"></span></a>
-                    <a class="hvr-icon-bounce"></a>
                     <br/>
                     <br/>
                 </div>
