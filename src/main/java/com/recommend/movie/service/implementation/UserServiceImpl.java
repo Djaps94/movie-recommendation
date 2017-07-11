@@ -1,6 +1,7 @@
 package com.recommend.movie.service.implementation;
 
 import com.recommend.movie.model.User;
+import com.recommend.movie.recommender.CosineSimilarity;
 import com.recommend.movie.repository.UserRepository;
 import com.recommend.movie.service.UserService;
 import com.recommend.movie.util.UserDataset;
@@ -16,12 +17,14 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private UserDataset userDataset;
+    private CosineSimilarity cosineSimilarity;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserDataset userDataset){
+    public UserServiceImpl(UserRepository userRepository, UserDataset userDataset, CosineSimilarity cosineSimilarity){
 
         this.userRepository = userRepository;
         this.userDataset = userDataset;
+        this.cosineSimilarity = cosineSimilarity;
     }
 
     @Override
@@ -38,8 +41,10 @@ public class UserServiceImpl implements UserService {
     public User login(String username) {
         if(checkUser(username)) {
             Optional<User> u = userRepository.findByUsername(username);
-            if(u.isPresent())
+            if(u.isPresent()) {
+                cosineSimilarity.initialiseUserLikes(u.get().getId());
                 return u.get();
+            }
         }
 
         return null;

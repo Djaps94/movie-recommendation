@@ -1,8 +1,10 @@
 package com.recommend.movie.recommender;
 
 import com.recommend.movie.model.Movie;
+import com.recommend.movie.model.MovieRating;
 import com.recommend.movie.repository.GenreRepository;
 import com.recommend.movie.repository.MovieRepository;
+import com.recommend.movie.repository.RatingRepository;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.sparse.SparseVector;
 import org.slf4j.Logger;
@@ -31,11 +33,13 @@ public class CosineSimilarity {
 
     private MovieRepository movieRepository;
     private GenreRepository genreRepository;
+    private RatingRepository ratingRepository;
 
     @Autowired
-    public CosineSimilarity(MovieRepository movieRepository, GenreRepository genreRepository){
+    public CosineSimilarity(MovieRepository movieRepository, GenreRepository genreRepository, RatingRepository ratingRepository){
         this.movieRepository = movieRepository;
         this.genreRepository = genreRepository;
+        this.ratingRepository = ratingRepository;
     }
 
     @PostConstruct
@@ -50,8 +54,10 @@ public class CosineSimilarity {
         //initialiseMovieMatrix(movieMatrix, idf);
     }
 
-    private void initialiseUserLikes(){
-
+    public void initialiseUserLikes(long userID){
+        List<MovieRating> ratings = ratingRepository.findAllByUser_id(userID);
+        ratings.stream().map(rating -> rating.getMovie().getId())
+                        .forEach(id -> addToProfile(id));
     }
 
     private void initialiseMovieMatrix(DenseMatrix movieMatrix, SparseVector idf){
