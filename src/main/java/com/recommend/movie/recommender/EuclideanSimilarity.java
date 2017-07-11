@@ -45,7 +45,6 @@ public class EuclideanSimilarity {
             users.add(new SparseVector(size, size));
 
         user = new SparseVector(size, size);
-        initialiseUsersVectors();
     }
 
 
@@ -65,7 +64,14 @@ public class EuclideanSimilarity {
             return userCompare;
     }
 
-
+    public double euclideanSimilarity(SparseVector user, SparseVector target){
+        int sum = 0;
+        for(int i = 1; i < user.size(); i++){
+            sum += Math.pow(user.get(i) - target.get(i), 2);
+        }
+        double distance = Math.sqrt(sum);
+        return 1/(1+distance);
+    }
 
     public List<SparseVector> test(){
         return users;
