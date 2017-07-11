@@ -35,6 +35,14 @@ var app = angular.module('factory', []).factory('factory',function ($http) {
             url: "/movies/topRated/"+pageNumber
         });
     }
+
+    factory.getRecommended = function () {
+        return $http({
+             method: 'GET',
+             url: "/movies/recommended"
+        });
+    }
+
     // RATING
 
     factory.getMovieRatings = function(movie){

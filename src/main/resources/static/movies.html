@@ -16,7 +16,7 @@
             </form>
             <ul class = "nav navbar-nav">
                 <li>
-                    <a><span class="fa fa-film"></span> Recommendations</a>
+                    <a ng-click="recommended()" ><span class="fa fa-film"></span> Recommendations</a>
                 </li>
                 <li>
                     <a ng-click="topRated()"><span class="fa fa-star-o"></span> Top rated</a>
@@ -32,6 +32,10 @@
 
     <!-- PRIKAZ FILMOVA -->
     <div ng-if="moviesShow" style="position: relative;">
+        <div ng-if="loatingTime">
+            <h3 style="color: dodgerblue; text-align: center">Loading...</h3>
+            <hr>
+        </div>
         <div class="row" style="margin-bottom: 1%;" ng-repeat="movie in movies">
             <div ng-if="!($index % 4)">
                 <div class="col-md-3 hvr-grow" ng-click="showMovie(movies[$index])" ng-if="($index < movies.length)">
@@ -69,7 +73,7 @@
             </div>
         </div>
 
-        <div style="position: absolute; bottom: 0;left: 45%;">
+        <div style="position: absolute; bottom: 0;left: 45%;" ng-if="!recommendedTime">
             <div data-tooltip="Previous" class="pagination__dot" ng-click="nextPage(pageNumber-1)"> </div>
             <div data-tooltip="Page {{pageNumber + 1}}" class="pagination__dot" ng-click="nextPage(pageNumber+1)"> </div>
             <div data-tooltip="Page {{pageNumber + 2}}" class="pagination__dot" ng-click="nextPage(pageNumber+2)"> </div>
