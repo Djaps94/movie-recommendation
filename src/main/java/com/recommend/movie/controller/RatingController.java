@@ -76,7 +76,7 @@ public class RatingController {
     @RequestMapping(
             method = RequestMethod.POST,
             value = "/rate/{movieID}/{userID}/{rateValue}",
-            produces = "text/plain"
+            produces = "application/json"
     )
     @ResponseBody
     public MovieRating rateMovie(@PathVariable("movieID") long movieID, @PathVariable("userID") long userID, @PathVariable("rateValue") float rate){

@@ -28,6 +28,13 @@ var app = angular.module('factory', []).factory('factory',function ($http) {
         });
     }
 
+
+    factory.mostRated = function (pageNumber) {
+        return $http({
+            method: 'GET',
+            url: "/movies/topRated/"+pageNumber
+        });
+    }
     // RATING
 
     factory.getMovieRatings = function(movie){
@@ -43,6 +50,7 @@ var app = angular.module('factory', []).factory('factory',function ($http) {
             url: "/rating/rate/"+movieID+"/"+userID+"/"+rate
         });
     }
+
 
     // USERS
 

@@ -59,7 +59,7 @@ public class RatingServiceImpl implements RatingService{
         Optional<Movie> movie = movieRepository.findById(movieID);
         Optional<User> user = userRepository.findById(userID);
 
-        if(!user.isPresent() || !user.isPresent())
+        if(!user.isPresent() || !movie.isPresent())
             return null;
 
         MovieRating newMovieRating = new MovieRating();

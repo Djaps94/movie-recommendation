@@ -80,4 +80,16 @@ public class MovieController {
         return movieService.searchMovie(pageNumber,movieTitle);
     }
 
+
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/topRated/{pageNumber}",
+            produces = "application/json"
+    )
+    @ResponseBody
+    public List<Movie> topRated(@PathVariable("pageNumber") int pageNumber){
+        return movieService.topRated(pageNumber);
+    }
+
+
 }

@@ -21,4 +21,6 @@ public interface MovieService {
 
     public List<Movie> searchMovie(int pageNumber, String title);
 
+    public List<Movie> topRated(int pageNumber);
+
 }
