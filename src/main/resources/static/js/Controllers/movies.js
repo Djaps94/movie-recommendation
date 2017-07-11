@@ -10,7 +10,7 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
     $scope.moviesShow = true;
     $scope.pageNumber = 0;
     $scope.factsShow = false;
-
+    $scope.loatingTime = false;
     $scope.user = JSON.parse(localStorage.getItem("user"));
 
     $scope.searchTitle = "";
@@ -74,6 +74,7 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
     }
 
     $scope.searchMovie = function () {
+        $scope.recommendedTime = false;
 
         if ($scope.searchTitle.trim() === "") {
             $scope.pageNumber = 0;
@@ -143,7 +144,7 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
     $scope.topRated = function () {
         $scope.moviesShow = true;
         $scope.pageNumber = 0;
-
+        $scope.recommendedTime = false;
         $factory.mostRated($scope.pageNumber).then(
             function success(response) {
                 alert("vratih se");
@@ -153,6 +154,27 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
 
     };
 
+    // recommended
+    $scope.recommended = function () {
+
+        $scope.moviesShow = true;
+        $scope.pageNumber = 0;
+        searchingTime = false;
+        $scope.recommendedTime = true;
+        $scope.movies = [];
+        $scope.loatingTime = true;
+
+        $factory.getRecommended().then(
+            function success(response) {
+                $scope.movies = response.data;
+                $scope.loatingTime = false;
+            }
+
+        )
+
+
+
+    }
 
 
 }]);

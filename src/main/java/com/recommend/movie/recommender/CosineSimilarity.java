@@ -51,7 +51,7 @@ public class CosineSimilarity {
         userSeen = new DenseMatrix(((Long)movieRows).intValue(), 1);
         userLikes = new DenseMatrix(((Long)movieRows).intValue(), 1);
         idf = new SparseVector(((Long)movieCols).intValue() -1);
-        //initialiseMovieMatrix(movieMatrix, idf);
+        initialiseMovieMatrix(movieMatrix, idf);
     }
 
     public void initialiseUserLikes(long userID){
