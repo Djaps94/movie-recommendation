@@ -7,6 +7,7 @@ import com.recommend.movie.recommender.EuclideanSimilarity;
 import com.recommend.movie.repository.MovieRepository;
 import com.recommend.movie.repository.RatingRepository;
 import com.recommend.movie.service.MovieService;
+import com.recommend.movie.tasks.FetchTopRatedTask;
 import com.recommend.movie.util.MovieDataset;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,10 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -83,30 +81,27 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<Movie> topRated(int pageNumber) {
         ExecutorService exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        Map<Movie, Double> movieRatings = new ConcurrentHashMap<>();
-
-        for(int i = 0; i < movieRepository.count(); i++) {
+        ConcurrentHashMap<Movie, Double> movieRatings = new ConcurrentHashMap<>();
+        int i;
+        for(i = 0; i < 100; i++) {
             if (!ratingRepository.existsByMovie_id(new Long(i + 1)))
                 continue;
 
+            exec.execute(new FetchTopRatedTask(i,movieRatings, ratingRepository));
 
-            List<Object[]> value = ratingRepository.getRatedMovies(new Long(i+1));
-            movieRatings.put((Movie)value.get(0)[0], (Double) value.get(0)[1]);
         }
 
-        HashMap<Movie, Double> sorted = movieRatings.entrySet().stream().
-                sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
-                ));
+        HashMap<Movie, Double> sorted = movieRatings.entrySet().stream().sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
+                                                                        .collect(Collectors.toMap(  Map.Entry::getKey,
+                                                                                                    Map.Entry::getValue,
+                                                                                                    (e1, e2) -> e1,
+                                                                                                    LinkedHashMap::new
+                                                                                            ));
 
 
         List<Movie> moviesToReturn = sorted.entrySet().stream().map(o -> o.getKey())
-                                                    .limit(10)
-                                                    .collect(Collectors.toList());
+                .limit(10)
+                .collect(Collectors.toList());
 
 
         return moviesToReturn;

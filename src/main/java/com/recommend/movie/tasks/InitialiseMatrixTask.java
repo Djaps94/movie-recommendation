@@ -1,4 +1,4 @@
-package com.recommend.movie.recommender;
+package com.recommend.movie.tasks;
 
 
 import com.recommend.movie.model.Genre;

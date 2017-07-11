@@ -5,10 +5,10 @@ import com.recommend.movie.model.MovieRating;
 import com.recommend.movie.repository.GenreRepository;
 import com.recommend.movie.repository.MovieRepository;
 import com.recommend.movie.repository.RatingRepository;
+import com.recommend.movie.tasks.InitialiseMatrixTask;
+import com.recommend.movie.tasks.NormalizeMatrixTask;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.sparse.SparseVector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
