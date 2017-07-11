@@ -8,7 +8,6 @@ import com.recommend.movie.repository.MovieRepository;
 import com.recommend.movie.repository.RatingRepository;
 import com.recommend.movie.repository.UserRepository;
 import com.recommend.movie.service.RatingService;
-import no.uib.cipr.matrix.sparse.SparseVector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
