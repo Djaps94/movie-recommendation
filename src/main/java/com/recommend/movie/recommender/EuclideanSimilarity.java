@@ -54,14 +54,30 @@ public class EuclideanSimilarity {
     }
 
     private SparseVector initialiseUsersVectors(int i){
-            SparseVector userCompare = new SparseVector(size, size);
-            userCompare.set(0, i);
-            List<MovieRating> ratings = ratingRepository.findAllByUser_id(((Integer)i).longValue()+1);
-            if(ratings.isEmpty())
-                return null;
-            ratings.stream().forEach(rating -> userCompare.set(rating.getMovie().getId().intValue(), rating.getRating()));
-            return userCompare;
+        SparseVector userCompare = new SparseVector(size, size);
+        userCompare.set(0, i);
+        List<MovieRating> ratings = ratingRepository.findAllByUser_id(((Integer)i).longValue()+1);
+        if(ratings.isEmpty())
+            return null;
+        ratings.stream().forEach(rating -> userCompare.set(rating.getMovie().getId().intValue(), rating.getRating()));
+        return userCompare;
     }
+
+    private SparseVector jaccardVectors(int i){
+        SparseVector userCompare = new SparseVector(size, size);
+        userCompare.set(0, i);
+        List<MovieRating> ratings = ratingRepository.findAllByUser_id(((Integer)i).longValue()+1);
+        if(ratings.isEmpty())
+            return null;
+        ratings.stream().forEach((MovieRating rating) -> {
+            if(rating.getRating() >= 2.5)
+                userCompare.set(rating.getMovie().getId().intValue(), 1);
+            else
+                userCompare.set(rating.getMovie().getId().intValue(), 0);
+            });
+        return userCompare;
+    }
+
 
     private double euclideanSimilarity(SparseVector user, SparseVector target){
         if(target == null)
@@ -74,10 +90,28 @@ public class EuclideanSimilarity {
         return 1/(1+distance);
     }
 
+    private double jaccardSimilarity(SparseVector user, SparseVector target){
+        if(target == null)
+            return 0;
+        double m11 = 0;
+        double m00 = 0;
+        for(int i = 1; i < user.size(); i++){
+            if(user.get(i) == 1 && target.get(i) == 1)
+                m11++;
+            else if(user.get(i) == 0 && target.get(i) == 0)
+                m00++;
+        }
+        double distance = (user.size() + target.size() - 2*(m11+m00))/(user.size() + target.size() - (m00 + m11));
+        logger.info("m00: "+String.valueOf(m00));
+        logger.info("m11: "+String.valueOf(m11));
+        logger.info("distance: "+String.valueOf(distance));
+        return 1-distance;
+    }
+
     public Map<Integer, Double> calculatePredictions(){
         Map<Integer, Double> result = new HashMap<>();
-        for(int i = 100; i < 120; i++){
-            double sim = euclideanSimilarity(initialiseUsersVectors(1), initialiseUsersVectors(i+1));
+        for(int i = 0; i < 20; i++){
+            double sim = jaccardSimilarity(jaccardVectors(1), jaccardVectors(i+1));
             result.put(i+1, sim);
         }
         Map r = result.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
