@@ -14,6 +14,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -78,58 +82,34 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<Movie> topRated(int pageNumber) {
+        ExecutorService exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        Map<Movie, Double> movieRatings = new ConcurrentHashMap<>();
 
-        log.info("Usao sam u top rated");
+        for(int i = 0; i < movieRepository.count(); i++) {
+            if (!ratingRepository.existsByMovie_id(new Long(i + 1)))
+                continue;
 
-        List<Movie> movies = new ArrayList<>();
-        HashMap<Movie, Double> movieRatings = new HashMap<>();
-        List<Object[]>value = ratingRepository.getRatedMovies(1);
-        for(Object[] obj : value){
-            log.info(String.valueOf(obj[0])+"---"+String.valueOf(obj[1]));
+
+            List<Object[]> value = ratingRepository.getRatedMovies(new Long(i+1));
+            movieRatings.put((Movie)value.get(0)[0], (Double) value.get(0)[1]);
         }
-//        for(Movie m : movies){
-//            log.info("U FORU SAM");
-//            if(!ratingRepository.existsByMovie_id(m.getId()))
-//                continue;
-//
-//            List<MovieRating> ratings = ratingRepository.findByMovie_id(m.getId());
-//
-//            double sum = ratings.parallelStream().mapToDouble(r -> r.getRating()).sum();
-//
-//            movieRatings.put(m, sum / ratings.size());
-//        }
-//
-//        log.info("IZASAO IZ FORA");
-//
-//        HashMap<Movie, Double> sorted = movieRatings.entrySet().stream().
-//                sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
-//                .collect(Collectors.toMap(
-//                        Map.Entry::getKey,
-//                        Map.Entry::getValue,
-//                        (e1, e2) -> e1,
-//                        LinkedHashMap::new
-//                ));
-//
-//
-////        int i = 0;
-//        List<Movie> moviesToReturn = sorted.entrySet().stream().map(o -> o.getKey())
-//                                                    .limit(10)
-//                                                    .collect(Collectors.toList());
-//
-//        for(Movie m : sorted.keySet()){
-//
-//            if(i >= 20*pageNumber+20){
-//                break;
-//            }
-//
-//            if(i >= 20*pageNumber){
-//                movesToReturn.add(m);
-//            }
-//
-//            i++;
-//        }
 
-        return movies;
+        HashMap<Movie, Double> sorted = movieRatings.entrySet().stream().
+                sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+
+
+        List<Movie> moviesToReturn = sorted.entrySet().stream().map(o -> o.getKey())
+                                                    .limit(10)
+                                                    .collect(Collectors.toList());
+
+
+        return moviesToReturn;
     }
 
     public Set<Movie> ratedMovies(){

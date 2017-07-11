@@ -18,7 +18,7 @@ public interface RatingRepository extends JpaRepository<MovieRating, Long> {
 
     boolean existsByMovie_id(long movie_id);
 
-    @Query("select r.id, sum(r.rating)/count(r.rating) FROM MovieRating r left outer join r.movie m where m.id = ?1 group by r.id order by r.id desc ")
+    @Query("select r.movie, sum(r.rating)/count(r.rating) FROM MovieRating r left outer join r.movie m where m.id = ?1 group by r.movie, m.id order by sum(r.rating) desc ")
     List<Object[]> getRatedMovies(long id);
 
     List<MovieRating> findAllByUser_id(long id);

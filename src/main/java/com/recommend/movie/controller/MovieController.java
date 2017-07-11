@@ -88,7 +88,7 @@ public class MovieController {
             produces = "application/json"
     )
     @ResponseBody
-    public List<Movie> topRated(@PathVariable("pageNumber") int pageNumber){
+    public List<Object> topRated(@PathVariable("pageNumber") int pageNumber){
         return movieService.topRated(pageNumber);
     }
 
