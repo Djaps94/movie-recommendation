@@ -1,6 +1,7 @@
 package com.recommend.movie.recommender;
 
 
+import com.recommend.movie.model.Movie;
 import com.recommend.movie.model.MovieRating;
 import com.recommend.movie.repository.MovieRepository;
 import com.recommend.movie.repository.RatingRepository;
@@ -108,18 +109,25 @@ public class EuclideanSimilarity {
         return 1-distance;
     }
 
-    public Map<Integer, Double> calculatePredictions(){
-        Map<Integer, Double> result = new HashMap<>();
+    public List<Movie> calculatePredictions(){
+        Map<Long, Double> result = new HashMap<>();
         for(int i = 0; i < 20; i++){
-            double sim = jaccardSimilarity(jaccardVectors(1), jaccardVectors(i+1));
-            result.put(i+1, sim);
+            double sim = jaccardSimilarity(user, jaccardVectors(i+1));
+            result.put(new Long(i+1), sim);
         }
-        Map r = result.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+        Map<Long, Double> r = result.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                                  .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (o, n) -> o, LinkedHashMap::new));
-        return r;
+
+        List<Movie> movies = new ArrayList<>();
+        r.entrySet().stream().map(o -> o.getKey())
+                             .limit(3)
+                             .forEach(key -> movies.addAll(ratingRepository.getTopMovies(key)));
+
+
+        return movies;
     }
 
-    public Map<Integer, Double> test(){
+    public List<Movie> test(){
         return calculatePredictions();
     }
 

@@ -1,6 +1,7 @@
 package com.recommend.movie.repository;
 
 
+import com.recommend.movie.model.Movie;
 import com.recommend.movie.model.MovieRating;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,5 +23,10 @@ public interface RatingRepository extends JpaRepository<MovieRating, Long> {
 
     List<MovieRating> findAllByUser_id(long id);
 
+<<<<<<< HEAD
 
+=======
+    @Query("select r.movie from MovieRating r left outer join r.user u where u.id = ?1 and r.rating >= 4")
+    List<Movie> getTopMovies(Long userId);
+>>>>>>> 939c473... Fetch top rated movies from top 3 similar user
 }
