@@ -3,6 +3,7 @@ package com.recommend.movie.controller;
 import com.recommend.movie.model.Movie;
 import com.recommend.movie.model.MovieRating;
 import com.recommend.movie.model.User;
+import com.recommend.movie.recommender.EuclideanSimilarity;
 import com.recommend.movie.repository.MovieRepository;
 import com.recommend.movie.repository.RatingRepository;
 import com.recommend.movie.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @Controller
@@ -22,6 +24,7 @@ public class RatingController {
     private UserRepository userRepository;
     private MovieRepository movieRepository;
     private RatingRepository ratingRepository;
+    private EuclideanSimilarity euclideanSimilarity;
 
     private static final Logger log = Logger.getLogger("dsads");
 
@@ -32,6 +35,7 @@ public class RatingController {
         this.userRepository = userRepository;
         this.movieRepository = movieRepository;
         this.ratingRepository = ratingRepository;
+        this.euclideanSimilarity = euclideanSimilarity;
     }
 
     @RequestMapping (
@@ -79,8 +83,7 @@ public class RatingController {
             produces = "application/json"
     )
     @ResponseBody
-    public MovieRating rateMovie(@PathVariable("movieID") long movieID, @PathVariable("userID") long userID, @PathVariable("rateValue") float rate){
+    public MovieRating rateMovie(@PathVariable("movieID") long movieID, @PathVariable("userID") long userID, @PathVariable("rateValue") float rate) {
         return ratingService.rateMovie(movieID, userID, rate);
     }
-
 }

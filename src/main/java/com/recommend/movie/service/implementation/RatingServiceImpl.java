@@ -5,6 +5,7 @@ import com.recommend.movie.model.Movie;
 import com.recommend.movie.model.MovieRating;
 import com.recommend.movie.model.User;
 import com.recommend.movie.recommender.CosineSimilarity;
+import com.recommend.movie.recommender.EuclideanSimilarity;
 import com.recommend.movie.repository.MovieRepository;
 import com.recommend.movie.repository.RatingRepository;
 import com.recommend.movie.repository.UserRepository;
@@ -13,8 +14,7 @@ import com.recommend.movie.util.RatingDataset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class RatingServiceImpl implements RatingService{
@@ -25,13 +25,15 @@ public class RatingServiceImpl implements RatingService{
     private MovieRepository movieRepository;
     private CosineSimilarity cosineSimilarity;
 
+
     @Autowired
-    public RatingServiceImpl(RatingRepository ratingRepository, RatingDataset ratingDataset, MovieRepository movieRepository, UserRepository userRepository, CosineSimilarity cosineSimilarity){
+    public RatingServiceImpl(RatingRepository ratingRepository, RatingDataset ratingDataset, MovieRepository movieRepository, UserRepository userRepository, CosineSimilarity cosineSimilarity, EuclideanSimilarity euclideanSimilarity){
         this.ratingRepository = ratingRepository;
         this.ratingDataset = ratingDataset;
         this.movieRepository = movieRepository;
         this.userRepository = userRepository;
         this.cosineSimilarity = cosineSimilarity;
+
     }
 
     @Override
@@ -75,8 +77,12 @@ public class RatingServiceImpl implements RatingService{
 
         ratingRepository.save(newMovieRating);
 
-        cosineSimilarity.addToProfile(movieID);
+        if(rate >= 3)
+            cosineSimilarity.addToProfile(movieID);
+
+
 
         return newMovieRating;
     }
+
 }

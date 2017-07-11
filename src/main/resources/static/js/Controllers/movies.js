@@ -147,6 +147,7 @@ app.controller('movies',['$scope', 'factory','$location', function ($scope, $fac
         $factory.mostRated($scope.pageNumber).then(
             function success(response) {
                 alert("vratih se");
+                var s = response.data;
             }
         )
 

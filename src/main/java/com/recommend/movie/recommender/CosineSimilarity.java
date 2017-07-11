@@ -1,12 +1,14 @@
 package com.recommend.movie.recommender;
 
 import com.recommend.movie.model.Movie;
+import com.recommend.movie.model.MovieRating;
 import com.recommend.movie.repository.GenreRepository;
 import com.recommend.movie.repository.MovieRepository;
+import com.recommend.movie.repository.RatingRepository;
+import com.recommend.movie.tasks.InitialiseMatrixTask;
+import com.recommend.movie.tasks.NormalizeMatrixTask;
 import no.uib.cipr.matrix.DenseMatrix;
 import no.uib.cipr.matrix.sparse.SparseVector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,11 +33,13 @@ public class CosineSimilarity {
 
     private MovieRepository movieRepository;
     private GenreRepository genreRepository;
+    private RatingRepository ratingRepository;
 
     @Autowired
-    public CosineSimilarity(MovieRepository movieRepository, GenreRepository genreRepository){
+    public CosineSimilarity(MovieRepository movieRepository, GenreRepository genreRepository, RatingRepository ratingRepository){
         this.movieRepository = movieRepository;
         this.genreRepository = genreRepository;
+        this.ratingRepository = ratingRepository;
     }
 
     @PostConstruct
@@ -50,8 +54,10 @@ public class CosineSimilarity {
         //initialiseMovieMatrix(movieMatrix, idf);
     }
 
-    private void initialiseUserLikes(){
-
+    public void initialiseUserLikes(long userID){
+        List<MovieRating> ratings = ratingRepository.findAllByUser_id(userID);
+        ratings.stream().map(rating -> rating.getMovie().getId())
+                        .forEach(id -> addToProfile(id));
     }
 
     private void initialiseMovieMatrix(DenseMatrix movieMatrix, SparseVector idf){
@@ -132,13 +138,7 @@ public class CosineSimilarity {
 
     public List<Movie> calculatePredictionSeen(){
         Map<Long, Double> predictions = new TreeMap<>();
-        for(int i = 0; i < tfIdf.numRows(); i++) {
-            double result = 0;
-            for (int j = 0; j < userProfileSeen.size(); j++) {
-                result += userProfileSeen.get(j) * tfIdf.get(i,j);
-            }
-            predictions.put(((Integer)i).longValue()+1, result);
-        }
+        setPredictions(predictions);
         Map<Long, Double> returnMap = predictions.entrySet().stream()
                                         .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, newValue) -> old, LinkedHashMap::new));
@@ -156,8 +156,30 @@ public class CosineSimilarity {
         return temp;
     }
 
-    public Map<Long, Double> calculatePrediction(){
+    public List<Movie> calculatePrediction(){
         Map<Long, Double> predictions = new TreeMap<>();
+        setPredictions(predictions);
+        Map<Long, Double> returnMap = predictions.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, newValue) -> old, LinkedHashMap::new));
+
+
+        List<Long> keys = returnMap.entrySet().stream().map(o -> o.getKey())
+                                                        .limit(4)
+                                                        .collect(Collectors.toList());
+
+        List<Movie> temp = new ArrayList<>();
+        for(Long key : keys){
+            Optional<Movie> movie = movieRepository.findById(key);
+            if(movie.isPresent())
+                temp.add(movie.get());
+        }
+
+
+        return temp;
+    }
+
+    private void setPredictions(Map<Long, Double> predictions){
         for(int i = 0; i < tfIdf.numRows(); i++) {
             double result = 0;
             for (int j = 0; j < userProfile.size(); j++) {
@@ -165,12 +187,6 @@ public class CosineSimilarity {
             }
             predictions.put(((Integer)i).longValue()+1, result);
         }
-        Map returnMap = predictions.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .limit(5)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, newValue) -> old, LinkedHashMap::new));
-
-        return returnMap;
     }
 
     public void addToSeen(Long movieId){

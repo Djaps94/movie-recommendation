@@ -3,9 +3,11 @@ package com.recommend.movie.service.implementation;
 import com.recommend.movie.model.Movie;
 import com.recommend.movie.model.MovieRating;
 import com.recommend.movie.recommender.CosineSimilarity;
+import com.recommend.movie.recommender.EuclideanSimilarity;
 import com.recommend.movie.repository.MovieRepository;
 import com.recommend.movie.repository.RatingRepository;
 import com.recommend.movie.service.MovieService;
+import com.recommend.movie.tasks.FetchTopRatedTask;
 import com.recommend.movie.util.MovieDataset;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -23,14 +26,16 @@ public class MovieServiceImpl implements MovieService {
     private MovieDataset movieDataset;
     private CosineSimilarity cosineSimilarity;
     private RatingRepository ratingRepository;
+    private EuclideanSimilarity euclideanSimilarity;
 
     private static final Logger log = Logger.getLogger("dsads");
 
-    public MovieServiceImpl(MovieRepository movieRepository, MovieDataset movieDataset, CosineSimilarity cosineSimilarity, RatingRepository ratingRepository){
+    public MovieServiceImpl(MovieRepository movieRepository, MovieDataset movieDataset, CosineSimilarity cosineSimilarity, RatingRepository ratingRepository, EuclideanSimilarity euclideanSimilarity){
         this.movieRepository = movieRepository;
         this.movieDataset = movieDataset;
         this.ratingRepository = ratingRepository;
         this.cosineSimilarity = cosineSimilarity;
+        this.euclideanSimilarity = euclideanSimilarity;
     }
 
     @Override
@@ -75,57 +80,41 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<Movie> topRated(int pageNumber) {
+        ExecutorService exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        ConcurrentHashMap<Movie, Double> movieRatings = new ConcurrentHashMap<>();
+        int i;
+        for(i = 0; i < 100; i++) {
+            if (!ratingRepository.existsByMovie_id(new Long(i + 1)))
+                continue;
 
-        log.info("Usao sam u top rated");
+            exec.execute(new FetchTopRatedTask(i,movieRatings, ratingRepository));
 
-        List<Movie> movies = new ArrayList<>();
-        HashMap<Movie, Double> movieRatings = new HashMap<>();
-        List<Object[]>value = ratingRepository.getRatedMovies(1);
-        for(Object[] obj : value){
-            log.info(String.valueOf(obj[0])+"---"+String.valueOf(obj[1]));
         }
-//        for(Movie m : movies){
-//            log.info("U FORU SAM");
-//            if(!ratingRepository.existsByMovie_id(m.getId()))
-//                continue;
-//
-//            List<MovieRating> ratings = ratingRepository.findByMovie_id(m.getId());
-//
-//            double sum = ratings.parallelStream().mapToDouble(r -> r.getRating()).sum();
-//
-//            movieRatings.put(m, sum / ratings.size());
-//        }
-//
-//        log.info("IZASAO IZ FORA");
-//
-//        HashMap<Movie, Double> sorted = movieRatings.entrySet().stream().
-//                sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
-//                .collect(Collectors.toMap(
-//                        Map.Entry::getKey,
-//                        Map.Entry::getValue,
-//                        (e1, e2) -> e1,
-//                        LinkedHashMap::new
-//                ));
-//
-//
-////        int i = 0;
-//        List<Movie> moviesToReturn = sorted.entrySet().stream().map(o -> o.getKey())
-//                                                    .limit(10)
-//                                                    .collect(Collectors.toList());
-//
-//        for(Movie m : sorted.keySet()){
-//
-//            if(i >= 20*pageNumber+20){
-//                break;
-//            }
-//
-//            if(i >= 20*pageNumber){
-//                movesToReturn.add(m);
-//            }
-//
-//            i++;
-//        }
 
+        HashMap<Movie, Double> sorted = movieRatings.entrySet().stream().sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
+                                                                        .collect(Collectors.toMap(  Map.Entry::getKey,
+                                                                                                    Map.Entry::getValue,
+                                                                                                    (e1, e2) -> e1,
+                                                                                                    LinkedHashMap::new
+                                                                                            ));
+
+
+        List<Movie> moviesToReturn = sorted.entrySet().stream().map(o -> o.getKey())
+                .limit(10)
+                .collect(Collectors.toList());
+
+
+        return moviesToReturn;
+    }
+
+    public Set<Movie> ratedMovies(){
+        List<Movie> jaccardMovie = euclideanSimilarity.calculatePredictions();
+        Set<Movie> movies = new HashSet<>();
+        movies.addAll(cosineSimilarity.calculatePrediction());
+        for(int i = 0; i < 4; i++){
+            int rnd = new Random().nextInt(jaccardMovie.size());
+            movies.add(jaccardMovie.get(rnd));
+        }
         return movies;
     }
 
